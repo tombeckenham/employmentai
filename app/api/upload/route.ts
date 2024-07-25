@@ -1,0 +1,78 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { put } from '@vercel/blob'
+import { Readable } from 'stream'
+
+// Define a type for our progress callback
+type ProgressCallback = (progress: number) => void
+
+// Create a singleton for storing upload progress
+class UploadProgressTracker {
+  private static instance: UploadProgressTracker
+  private progress: number = 0
+
+  private constructor() {}
+
+  public static getInstance(): UploadProgressTracker {
+    if (!UploadProgressTracker.instance) {
+      UploadProgressTracker.instance = new UploadProgressTracker()
+    }
+    return UploadProgressTracker.instance
+  }
+
+  public getProgress(): number {
+    return this.progress
+  }
+
+  public setProgress(progress: number): void {
+    this.progress = progress
+  }
+}
+
+export async function POST(request: NextRequest) {
+  const formData = await request.formData()
+  const file = formData.get('file') as File | null
+
+  if (!file) {
+    return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
+  }
+
+  try {
+    const filename = `${Date.now()}-${file.name}`
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+
+    const blob = await uploadWithProgress(filename, buffer, progress => {
+      UploadProgressTracker.getInstance().setProgress(progress)
+    })
+
+    return NextResponse.json({ url: blob.url })
+  } catch (error) {
+    console.error('Error uploading to Vercel Blob:', error)
+    return NextResponse.json({ error: 'Upload failed' }, { status: 500 })
+  }
+}
+
+async function uploadWithProgress(
+  filename: string,
+  buffer: Buffer,
+  progressCallback: ProgressCallback
+) {
+  const totalSize = buffer.length
+  let uploadedSize = 0
+
+  const readable = new Readable({
+    read(size) {
+      if (uploadedSize < totalSize) {
+        const chunk = buffer.slice(uploadedSize, uploadedSize + size)
+        this.push(chunk)
+        uploadedSize += chunk.length
+        const progress = Math.round((uploadedSize / totalSize) * 100)
+        progressCallback(progress)
+      } else {
+        this.push(null)
+      }
+    }
+  })
+
+  return await put(filename, readable, { access: 'public' })
+}
