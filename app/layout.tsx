@@ -1,5 +1,6 @@
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
+import Head from 'next/head'
 
 import '@/app/globals.css'
 import { cn } from '@/lib/utils'
@@ -36,6 +37,10 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <Head>
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+      </Head>
+
       <body
         className={cn(
           'font-sans antialiased',
