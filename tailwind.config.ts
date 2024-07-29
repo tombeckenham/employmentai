@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   darkMode: ['class'],
   content: [
@@ -18,10 +21,38 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ['var(--font-geist-sans)'],
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
         mono: ['var(--font-geist-mono)']
       },
       colors: {
+        amber: {
+          300: '#fcd34d',
+          400: '#fbbf24'
+        },
+        teal: {
+          500: '#14b8a6'
+        },
+        blue: {
+          600: '#2563eb'
+        },
+        slate: {
+          50: '#f8fafc',
+          600: '#475569',
+          800: '#1e293b',
+          900: '#0f172a'
+        },
+
+        indigo: {
+          600: '#4f46e5'
+        },
+        purple: {
+          600: '#7c3aed'
+        },
+        yellow: {
+          400: '#facc15',
+          300: '#fde047'
+        },
+
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
