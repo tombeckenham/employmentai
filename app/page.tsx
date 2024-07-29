@@ -8,14 +8,15 @@ import {
   Briefcase,
   TrendingUp,
   DollarSign,
-  Scale
+  Scale,
+  Lock
 } from 'lucide-react'
 
 // Import images
 import heroBackground from '@/public/images/hero-background.png'
 import contractAnalysisImage from '@/public/images/contract-analysis.png'
-import severanceAnalysisImage from '@/public/images/severance-analysis.png'
-import careerTransitionImage from '@/public/images/career-transition.png'
+import startupVsBigTechImage from '@/public/images/startup-vs-big-tech.png'
+import careerPathModelingImage from '@/public/images/career-path-modeling.png'
 import salaryOptimizationImage from '@/public/images/salary-optimization.png'
 import negotiationAssistanceImage from '@/public/images/negotiation-assistance.png'
 import legalRightsImage from '@/public/images/legal-rights.png'
@@ -26,11 +27,11 @@ const LandingPage: React.FC = () => {
       {/* Hero Section */}
       <header className="bg-gradient-to-r from-teal-500 to-blue-600 text-white">
         <div className="container mx-auto px-4 py-20 flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-8 md:mb-0">
+          <div className="md:w-1/2 mb-8 md:mb-0 md:pr-12">
             <h1 className="text-5xl font-bold mb-4">Be Invincible at Work</h1>
             <p className="text-xl mb-6">
-              Understand the true value of your employment terms. Get your FREE
-              favorability score for your contract or severance package now!
+              Optimize your tech career with AI-powered insights. Get your FREE
+              favorability score for your offer, including equity compensation.
             </p>
             <Link href="/dashboard" passHref>
               <button className="bg-amber-400 text-slate-900 font-bold py-3 px-8 rounded-full text-lg hover:bg-amber-300 transition duration-300 flex items-center">
@@ -58,20 +59,20 @@ const LandingPage: React.FC = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <ValueProp
-              title="Understand Your Position"
-              description="Get a clear picture of how favorable your contract or severance terms are compared to industry standards."
+              title="Decode Complex Tech Offers"
+              description="Understand the true value of your salary, bonuses, stock options, and RSUs compared to industry standards."
             />
             <ValueProp
-              title="Identify Improvement Areas"
-              description="Pinpoint specific clauses or terms that could be negotiated for better outcomes."
+              title="Optimize Your Equity"
+              description="Get insights on vesting schedules, strike prices, and potential equity value to maximize your compensation."
             />
             <ValueProp
-              title="Negotiate with Confidence"
-              description="Use data-driven insights to back your requests during negotiations."
+              title="Navigate Non-Competes"
+              description="Analyze non-compete clauses and their impact on your future career moves in the tech industry."
             />
             <ValueProp
-              title="Protect Your Interests"
-              description="Ensure you're not overlooking any crucial details in your employment terms."
+              title="Benchmark Against Top Tech Firms"
+              description="See how your offer stacks up against FAANG and other leading tech companies in your specific role."
             />
           </div>
         </div>
@@ -92,20 +93,20 @@ const LandingPage: React.FC = () => {
             />
             <FeatureCard
               icon={<Briefcase className="size-12 text-blue-500" />}
-              title="Severance Package Evaluation"
-              description="Get an objective assessment of your severance terms, ensuring you're receiving a fair deal during transitions."
-              image={severanceAnalysisImage}
+              title="Startup vs. Big Tech Comparison"
+              description="Evaluate trade-offs between startup equity and big tech stability, tailored to your career goals."
+              image={startupVsBigTechImage}
             />
             <FeatureCard
               icon={<TrendingUp className="size-12 text-amber-500" />}
-              title="Career Transition Guidance"
-              description="Receive personalized advice for your next career move based on your current contract terms and industry trends."
-              image={careerTransitionImage}
+              title="Career Path Modeling"
+              description="Model different career paths in tech, from IC to management, and see potential earnings over time."
+              image={careerPathModelingImage}
             />
             <FeatureCard
               icon={<DollarSign className="size-12 text-green-500" />}
               title="Compensation Optimization"
-              description="Understand how your salary and benefits stack up, and get tips to maximize your total compensation package."
+              description="Maximize your total compensation by understanding the interplay of salary, bonuses, and equity in tech packages."
               image={salaryOptimizationImage}
             />
             <FeatureCard
@@ -124,6 +125,26 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
+      {/* Privacy Section */}
+      <section className="py-16 bg-blue-50">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-8 text-blue-600">
+            Your Data, Your Privacy
+          </h2>
+          <div className="flex justify-center mb-8">
+            <Lock className="size-16 text-green-500" />
+          </div>
+          <p className="text-xl mb-4">
+            We take your privacy seriously. Your data is encrypted end-to-end
+            and never shared.
+          </p>
+          <p className="text-lg">
+            Our analysis is performed using anonymized, aggregated data to
+            ensure your personal information remains confidential.
+          </p>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="bg-gradient-to-r from-teal-500 to-blue-600 text-white py-20">
         <div className="container mx-auto px-4 text-center">
@@ -133,7 +154,7 @@ const LandingPage: React.FC = () => {
           <p className="text-xl mb-8">
             Whether you&apos;re reviewing a new contract or assessing a
             severance package, our favorability score gives you the insights you
-            need. It&apos;s quick, easy, and free to start!
+            need. It&apos;s quick, easy, and free to start.
           </p>
           <Link href="/dashboard" passHref>
             <button className="bg-amber-400 text-slate-900 font-bold py-3 px-8 rounded-full text-lg hover:bg-amber-300 transition duration-300 flex items-center mx-auto">
