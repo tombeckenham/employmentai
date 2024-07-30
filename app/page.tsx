@@ -62,7 +62,7 @@ const LandingPage: React.FC = () => {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold mb-16 text-center text-blue-600">
-            How We Help You Navigate Your Career
+            How We Help
           </h2>
           <div className="space-y-24">
             <FeatureCard
