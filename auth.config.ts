@@ -10,15 +10,20 @@ export const authConfig = {
     async authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
 
-      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard')
-      if (isOnDashboard) {
-        if (isLoggedIn) return true
-        return false
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL('/dashboard', nextUrl))
+      const isOnSignIn = nextUrl.pathname.startsWith('/login')
+      const isOnSignUp = nextUrl.pathname.startsWith('/signup')
+
+      const isOnHome = nextUrl.pathname === '/'
+
+      if (isOnSignIn || isOnSignUp || isOnHome) {
+        if (isLoggedIn) {
+          console.log('User is already logged in')
+          return Response.redirect(new URL('/dashboard', nextUrl))
+        }
+        return true
       }
 
-      return true
+      return isLoggedIn
     },
     async jwt({ token, user }) {
       if (user) {
