@@ -37,10 +37,6 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <Head>
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-      </Head>
-
       <body
         className={cn(
           'font-sans antialiased',
