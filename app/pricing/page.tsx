@@ -1,17 +1,16 @@
 import React from 'react'
-import { Check, X, ArrowRight } from 'lucide-react'
+import { Check, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
 const PricingPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
-      <header className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-4">Choose Your Plan</h1>
-          <p className="text-xl mb-6">
-            Unlock the full potential of your career with our AI-powered tools
-          </p>
-        </div>
+    <div className="min-h-screen bg-black text-white">
+      <header className="container mx-auto px-4 py-20 text-center">
+        <h1 className="text-6xl font-bold mb-6">Choose Your Plan</h1>
+        <p className="text-xl mb-10 text-gray-400 max-w-2xl mx-auto">
+          Unlock the full potential of your career with our AI-powered
+          negotiation tools
+        </p>
       </header>
 
       <section className="py-20">
@@ -61,28 +60,24 @@ const PricingPage: React.FC = () => {
         </div>
       </section>
 
-      <section className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-20">
+      <section className="py-20 bg-gray-900">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-4">
-            Ready to Elevate Your Career?
+            Ready to level up your career?
           </h2>
-          <p className="text-xl mb-8">
-            Choose a plan and start negotiating like a pro today.
+          <p className="text-xl mb-8 text-gray-400">
+            Don&apos;t leave money on the table. Get AI-powered insights for
+            your next career move.
           </p>
-          <Link href="/signup" passHref>
-            <button className="bg-amber-400 text-slate-900 font-bold py-3 px-8 rounded-full text-lg hover:bg-amber-300 transition duration-300 flex items-center mx-auto">
-              Get Started Now <ArrowRight className="ml-2" />
-            </button>
+          <Link
+            href="/signup"
+            className="inline-block bg-gradient-button text-gray-800 font-bold text-lg px-8 py-3 rounded-full transition-all duration-300 ease-in-out hover:shadow-lg relative overflow-hidden group"
+          >
+            <span className="relative z-10">Get started now</span>
+            <span className="shine-effect group-hover:animate-shine"></span>
           </Link>
         </div>
       </section>
-
-      <footer className="bg-slate-800 text-white py-8 text-center">
-        <p>
-          &copy; 2024 Employment AI. All rights reserved. Empowering
-          professionals to negotiate better contracts.
-        </p>
-      </footer>
     </div>
   )
 }
@@ -107,37 +102,39 @@ const PricingCard: React.FC<PricingCardProps> = ({
   highlighted = false
 }) => (
   <div
-    className={`w-full md:w-80 p-6 rounded-lg shadow-xl ${
-      highlighted ? 'bg-blue-50 border-2 border-blue-500' : 'bg-white'
+    className={`w-full md:w-80 p-6 rounded-lg ${
+      highlighted ? 'bg-gray-800 border-2 border-indigo-500' : 'bg-gray-900'
     }`}
   >
     <h3
       className={`text-2xl font-bold mb-2 ${
-        highlighted ? 'text-blue-600' : 'text-slate-900'
+        highlighted ? 'text-indigo-400' : 'text-white'
       }`}
     >
       {title}
     </h3>
-    <div className="text-4xl font-bold mb-2">{price}</div>
-    <p className="text-slate-600 mb-6">{description}</p>
+    <div className="text-4xl font-bold mb-2 text-white">{price}</div>
+    <p className="text-gray-400 mb-6">{description}</p>
     <ul className="mb-6 space-y-2">
       {features.map((feature, index) => (
-        <li key={index} className="flex items-center">
+        <li key={index} className="flex items-center text-gray-300">
           <Check className="text-green-500 mr-2" size={20} />
           <span>{feature}</span>
         </li>
       ))}
     </ul>
-    <Link href={buttonLink} passHref>
-      <button
-        className={`w-full py-2 px-4 rounded-full font-bold ${
-          highlighted
-            ? 'bg-blue-600 text-white hover:bg-blue-700'
-            : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
-        } transition duration-300`}
-      >
-        {buttonText}
-      </button>
+    <Link
+      href={buttonLink}
+      className={`inline-block w-full text-center py-2 px-4 rounded-full font-bold ${
+        highlighted
+          ? 'bg-gradient-button text-gray-800 relative overflow-hidden group'
+          : 'bg-gray-700 text-white hover:bg-gray-600'
+      } transition-all duration-300 ease-in-out hover:shadow-lg`}
+    >
+      <span className="relative z-10">{buttonText}</span>
+      {highlighted && (
+        <span className="shine-effect group-hover:animate-shine"></span>
+      )}
     </Link>
   </div>
 )
