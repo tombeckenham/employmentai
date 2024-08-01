@@ -1,222 +1,143 @@
 import React from 'react'
-import Image, { StaticImageData } from 'next/image'
+import Image from 'next/image'
 import Link from 'next/link'
-import {
-  ArrowRight,
-  CheckCircle,
-  Shield,
-  Briefcase,
-  TrendingUp,
-  DollarSign,
-  Scale,
-  Lock
-} from 'lucide-react'
 
-// Import images
-import heroBackground from '@/public/images/hero-background.png'
-import contractAnalysisImage from '@/public/images/contract-analysis.png'
-import startupVsBigTechImage from '@/public/images/startup-vs-big-tech.png'
-import careerPathModelingImage from '@/public/images/career-path-modeling.png'
-import salaryOptimizationImage from '@/public/images/salary-optimization.png'
-import negotiationAssistanceImage from '@/public/images/negotiation-assistance.png'
-import legalRightsImage from '@/public/images/legal-rights.png'
+interface FeatureCardProps {
+  title: string
+  description: string
+  image: string
+}
+
+const FeatureCard: React.FC<FeatureCardProps> = ({
+  title,
+  description,
+  image
+}) => (
+  <div className="flex flex-col md:flex-row items-center">
+    <div className="md:w-1/2 mb-8 md:mb-0">
+      <Image
+        src={image}
+        alt={title}
+        width={500}
+        height={300}
+        className="rounded-lg"
+      />
+    </div>
+    <div className="md:w-1/2 md:pl-12">
+      <h3 className="text-2xl font-bold mb-4">{title}</h3>
+      <p className="text-gray-400 text-lg">{description}</p>
+    </div>
+  </div>
+)
 
 const LandingPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
+    <div className="min-h-screen bg-black text-white">
       {/* Hero Section */}
-      <header className="bg-gradient-to-r from-teal-500 to-blue-600 text-white">
-        <div className="container mx-auto px-4 py-20 flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-8 md:mb-0 md:pr-12">
-            <h1 className="text-5xl font-bold mb-4">Be Invincible at Work</h1>
-            <p className="text-xl mb-6">
-              Optimize your tech career with AI-powered insights. Get your FREE
-              favorability score for your offer, including equity compensation.
-            </p>
-            <Link href="/dashboard" passHref>
-              <button className="bg-amber-400 text-slate-900 font-bold py-3 px-8 rounded-full text-lg hover:bg-amber-300 transition duration-300 flex items-center">
-                Get Your Score <ArrowRight className="ml-2" />
-              </button>
-            </Link>
-          </div>
-          <div className="md:w-1/2">
-            <Image
-              src={heroBackground}
-              alt="Empowered professionals"
-              width={600}
-              height={400}
-              className="rounded-lg shadow-2xl"
-            />
-          </div>
-        </div>
+      <header className="container mx-auto px-4 py-20 text-center">
+        <h1 className="text-6xl font-bold mb-6">
+          Negotiate better
+          <br />
+          with AI
+        </h1>
+        <p className="text-xl mb-10 text-gray-400 max-w-2xl mx-auto">
+          Employment AI is your personal assistant for analyzing contracts,
+          decoding offers, and negotiating like a pro.
+        </p>
+        <Link
+          href="/dashboard"
+          className="inline-block bg-gradient-button text-gray-800 font-bold text-lg px-8 py-3 rounded-full transition-all duration-300 ease-in-out hover:shadow-lg relative overflow-hidden group"
+        >
+          <span className="relative z-10">Get started</span>
+          <span className="shine-effect group-hover:animate-shine"></span>
+        </Link>
       </header>
 
-      {/* Value Proposition Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center text-blue-600">
-            Why You Need Our Favorability Score
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <ValueProp
-              title="Decode Complex Tech Offers"
-              description="Understand the true value of your salary, bonuses, stock options, and RSUs compared to industry standards."
-            />
-            <ValueProp
-              title="Optimize Your Equity"
-              description="Get insights on vesting schedules, strike prices, and potential equity value to maximize your compensation."
-            />
-            <ValueProp
-              title="Navigate Non-Competes"
-              description="Analyze non-compete clauses and their impact on your future career moves in the tech industry."
-            />
-            <ValueProp
-              title="Benchmark Against Top Tech Firms"
-              description="See how your offer stacks up against FAANG and other leading tech companies in your specific role."
-            />
-          </div>
-        </div>
-      </section>
-
       {/* Features Section */}
-      <section className="py-20 bg-slate-100">
+      <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold mb-16 text-center text-blue-600">
-            Comprehensive Employment Analysis
+          <h2 className="text-4xl font-bold mb-16 text-center">
+            Uncover the features that make Employment AI your ultimate career
+            ally
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="space-y-32">
             <FeatureCard
-              icon={<Shield className="size-12 text-teal-500" />}
-              title="Contract Favorability Score"
-              description="Our AI assesses your job offer or contract, providing a clear favorability rating and highlighting areas for improvement."
-              image={contractAnalysisImage}
+              title="Contract and Offer Analysis"
+              description="Our AI-powered scanner provides a detailed summary of your entire contract or job offer in words you can understand. Each section is broken down and scored from 'Very Fair' to 'Strongly Favors Employer'."
+              image="/images/contract-analysis.png"
             />
             <FeatureCard
-              icon={<Briefcase className="size-12 text-blue-500" />}
-              title="Startup vs. Big Tech Comparison"
-              description="Evaluate trade-offs between startup equity and big tech stability, tailored to your career goals."
-              image={startupVsBigTechImage}
+              title="Layoff and Severance Support"
+              description="Facing a layoff can be overwhelming, especially when you're given little time to review complex severance terms. We break down your severance agreement, highlight critical points, and help you understand what's negotiable - all within minutes."
+              image="/images/negotiation.png"
             />
             <FeatureCard
-              icon={<TrendingUp className="size-12 text-amber-500" />}
-              title="Career Path Modeling"
-              description="Model different career paths in tech, from IC to management, and see potential earnings over time."
-              image={careerPathModelingImage}
+              title="Decode Complex Terms"
+              description="From stock options and RSUs to non-compete clauses and intellectual property rights, we explain every aspect of your offer or severance package in plain English. No more confusion about what you're agreeing to."
+              image="/images/decode-offers.png"
             />
             <FeatureCard
-              icon={<DollarSign className="size-12 text-green-500" />}
-              title="Compensation Optimization"
-              description="Maximize your total compensation by understanding the interplay of salary, bonuses, and equity in tech packages."
-              image={salaryOptimizationImage}
-            />
-            <FeatureCard
-              icon={<ArrowRight className="size-12 text-purple-500" />}
-              title="Negotiation Strategy"
-              description="Leverage your favorability score to develop a strong negotiation strategy for better terms."
-              image={negotiationAssistanceImage}
-            />
-            <FeatureCard
-              icon={<Scale className="size-12 text-red-500" />}
-              title="Legal Rights Assessment"
-              description="Understand the legal implications of your contract terms and how they align with employment laws."
-              image={legalRightsImage}
+              title="Know Your Worth"
+              description="Whether you're negotiating a new offer or a severance package, understand how it compares to industry standards. We analyze your role, location, experience, and more to identify key areas for negotiation."
+              image="/images/know-your-worth.png"
             />
           </div>
         </div>
       </section>
 
       {/* Privacy Section */}
-      <section className="py-16 bg-blue-50">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-8 text-blue-600">
-            Your Data, Your Privacy
+      <section className="py-20 bg-gray-900">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold mb-8 text-center">
+            Your Privacy is Our Priority
           </h2>
-          <div className="flex justify-center mb-8">
-            <Lock className="size-16 text-green-500" />
+          <div className="max-w-3xl mx-auto">
+            <p className="text-lg mb-6">
+              At Employment AI, we understand the sensitive nature of your
+              employment documents. That&apos;s why we&apos;ve implemented
+              state-of-the-art security measures to ensure your data remains
+              private and secure:
+            </p>
+            <ul className="list-disc list-inside space-y-4 text-gray-300">
+              <li>End-to-end encryption for all uploaded documents</li>
+              <li>Strict access controls and authentication protocols</li>
+              <li>Regular security audits and vulnerability assessments</li>
+              <li>
+                Compliance with GDPR, CCPA, and other data protection
+                regulations
+              </li>
+              <li>Option to delete your data at any time</li>
+            </ul>
+            <p className="mt-6 text-lg">
+              Your trust is important to us. We never share, sell, or use your
+              data for any purpose other than providing you with the best
+              possible contract analysis and negotiation support.
+            </p>
           </div>
-          <p className="text-xl mb-4">
-            We take your privacy seriously. Your data is encrypted end-to-end
-            and never shared.
-          </p>
-          <p className="text-lg">
-            Our analysis is performed using anonymized, aggregated data to
-            ensure your personal information remains confidential.
-          </p>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-teal-500 to-blue-600 text-white py-20">
+      <section className="py-20">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-4">
-            Ready to Understand Your True Work Value?
+            Ready to level up your career?
           </h2>
-          <p className="text-xl mb-8">
-            Whether you&apos;re reviewing a new contract or assessing a
-            severance package, our favorability score gives you the insights you
-            need. It&apos;s quick, easy, and free to start.
+          <p className="text-xl mb-8 text-gray-400">
+            Don&apos;t leave money on the table. Get AI-powered insights for
+            your next career move.
           </p>
-          <Link href="/dashboard" passHref>
-            <button className="bg-amber-400 text-slate-900 font-bold py-3 px-8 rounded-full text-lg hover:bg-amber-300 transition duration-300 flex items-center mx-auto">
-              Get Your Score <ArrowRight className="ml-2" />
-            </button>
+          <Link
+            href="/dashboard"
+            className="inline-block bg-gradient-button text-gray-800 font-bold text-lg px-8 py-3 rounded-full transition-all duration-300 ease-in-out hover:shadow-lg relative overflow-hidden group"
+          >
+            <span className="relative z-10">Start your analysis</span>
+            <span className="shine-effect group-hover:animate-shine"></span>
           </Link>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-slate-800 text-white py-8 text-center">
-        <p>
-          &copy; 2024 Employment AI. All rights reserved. Empowering
-          professionals to understand and maximize their employment terms.
-        </p>
-      </footer>
     </div>
   )
 }
-
-interface ValuePropProps {
-  title: string
-  description: string
-}
-
-const ValueProp: React.FC<ValuePropProps> = ({ title, description }) => (
-  <div className="flex items-start">
-    <CheckCircle className="text-green-500 mr-4 mt-1 shrink-0" size={24} />
-    <div>
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-slate-600">{description}</p>
-    </div>
-  </div>
-)
-
-interface FeatureCardProps {
-  icon: React.ReactNode
-  title: string
-  description: string
-  image: StaticImageData
-}
-
-const FeatureCard: React.FC<FeatureCardProps> = ({
-  icon,
-  title,
-  description,
-  image
-}) => (
-  <div className="bg-white rounded-lg shadow-xl overflow-hidden transition-transform duration-300 hover:scale-105">
-    <Image
-      src={image}
-      alt={title}
-      width={400}
-      height={200}
-      className="w-full h-48 object-cover"
-    />
-    <div className="p-6">
-      <div className="flex justify-center mb-4">{icon}</div>
-      <h3 className="text-xl font-bold mb-2 text-blue-600">{title}</h3>
-      <p className="text-slate-600">{description}</p>
-    </div>
-  </div>
-)
 
 export default LandingPage

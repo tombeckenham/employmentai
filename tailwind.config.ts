@@ -1,8 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 
+import type { Config } from 'tailwindcss'
+import plugin from 'tailwindcss/plugin'
+
 const defaultTheme = require('tailwindcss/defaultTheme')
 
-module.exports = {
+const config: Config = {
   darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
@@ -87,12 +90,16 @@ module.exports = {
           foreground: 'hsl(var(--card-foreground))'
         }
       },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)'
+      backgroundImage: {
+        'gradient-button': 'linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%)'
       },
+
       keyframes: {
+        shine: {
+          '0%': { left: '-100%', opacity: '0' },
+          '100%': { left: '0', opacity: '1' }
+        },
+
         'accordion-down': {
           from: { height: '0' },
           to: { height: 'var(--radix-accordion-content-height)' }
@@ -103,10 +110,30 @@ module.exports = {
         }
       },
       animation: {
+        shine: 'shine 0.5s forwards',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out'
       }
     }
   },
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')]
+  plugins: [
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        '.shine-effect': {
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: '100%',
+          background:
+            'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
+          opacity: '0'
+        }
+      })
+    }),
+    require('tailwindcss-animate'),
+    require('@tailwindcss/typography')
+  ]
 }
+
+export default config
