@@ -48,7 +48,7 @@ const LandingPage: React.FC = () => {
           href="/dashboard"
           className="inline-block bg-gradient-button text-gray-800 font-bold text-lg px-8 py-3 rounded-full transition-all duration-300 ease-in-out hover:shadow-lg relative overflow-hidden group"
         >
-          <span className="relative z-10">Get started</span>
+          <span className="relative z-10">Get your score</span>
           <span className="shine-effect group-hover:animate-shine"></span>
         </Link>
       </header>
