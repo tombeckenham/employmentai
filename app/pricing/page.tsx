@@ -31,11 +31,11 @@ const PricingPage: React.FC = () => {
             <PricingCard
               title="Standard"
               price="$250"
-              description="One-off payment for comprehensive support"
+              description="One-off payment per role (or new roles within a year)"
               features={[
                 'Upload documents for a year',
                 'Detailed Report',
-                'Query via Chat',
+                'Query via Chat forever',
                 'Layoff support',
                 'Personalized Negotiation'
               ]}

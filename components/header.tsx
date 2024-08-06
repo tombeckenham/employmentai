@@ -16,7 +16,7 @@ import { SidebarToggle } from './sidebar-toggle'
 import { ChatHistory } from './chat-history'
 import { Session } from '@/lib/types'
 
-async function UserOrLogin() {
+export async function UserOrLogin() {
   const session = (await auth()) as Session
   return (
     <>
@@ -33,7 +33,7 @@ async function UserOrLogin() {
             </Link>
             <Link
               href="/signup"
-              className="inline-block bg-gradient-button text-gray-800 font-bold text-sm px-4 py-2 rounded-full transition-all duration-300 ease-in-out hover:shadow-lg relative overflow-hidden group mr-4"
+              className="inline-block bg-gradient-button text-gray-800 font-bold text-sm px-4 py-2 rounded-full transition-all duration-300 ease-in-out hover:shadow-lg relative overflow-hidden group"
             >
               <span className="relative z-10">Sign up</span>
               <span className="shine-effect group-hover:animate-shine"></span>
@@ -44,6 +44,7 @@ async function UserOrLogin() {
     </>
   )
 }
+
 export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full bg-gray-900 text-white">
@@ -53,23 +54,19 @@ export function Header() {
             <Link href="/" className="font-bold text-xl">
               Employment AI
             </Link>
-            <nav className="ml-10 flex items-baseline space-x-4">
-              <Link
-                href="/"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Home
-              </Link>
-              <Link
-                href="/pricing"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Pricing
-              </Link>
-            </nav>
+            <div className="hidden md:block">
+              <nav className="ml-10 flex items-baseline space-x-4">
+                <Link
+                  href="/pricing"
+                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Pricing
+                </Link>
+              </nav>
+            </div>
           </div>
           <div className="flex items-center">
-            <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
+            <React.Suspense fallback={<div>Loading...</div>}>
               <UserOrLogin />
             </React.Suspense>
           </div>
