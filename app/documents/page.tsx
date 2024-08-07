@@ -2,51 +2,31 @@ import { Suspense } from 'react'
 import Link from 'next/link'
 import { auth } from '@/auth'
 import { sql } from '@vercel/postgres'
-import { Upload, File, ArrowRight } from 'lucide-react'
+import { Upload, File, ArrowRight, Trash2 } from 'lucide-react'
 import DocumentUpload from '@/components/document-upload'
+import { getDocuments } from '../actions/getDocuments'
+import { softDeleteDocument } from '../actions/softDeleteDocument'
+import DocumentCard from '@/components/document-card'
 
 async function DocumentList() {
-  const session = await auth()
+  const documents = await getDocuments()
 
-  if (!session || !session.user) {
-    return <div>Please log in to view your documents.</div>
+  async function handleDelete(id: string) {
+    'use server'
+    await softDeleteDocument(id)
   }
-
-  const documents = await sql`
-    SELECT id, filename, content_type, created_at 
-    FROM documents 
-    WHERE "user_id" = ${session.user.id} 
-    ORDER BY created_at DESC
-  `
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {documents.rows.map(doc => (
-        <div
+      {documents.map(doc => (
+        <DocumentCard
           key={doc.id}
-          className="bg-white rounded-lg shadow-md p-6 flex flex-col justify-between"
-        >
-          <div>
-            <div className="flex items-center mb-4">
-              <File className="size-8 text-blue-500 mr-3" />
-              <h3 className="text-lg font-semibold text-gray-800 truncate">
-                {doc.filename}
-              </h3>
-            </div>
-            <p className="text-sm text-gray-500 mb-2">
-              Uploaded on {new Date(doc.created_at).toLocaleDateString()}
-            </p>
-            <p className="text-sm text-gray-500 mb-4">
-              Type: {doc.content_type}
-            </p>
-          </div>
-          <Link
-            href={`/report/${doc.id}`}
-            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            View Report <ArrowRight className="ml-2 size-4" />
-          </Link>
-        </div>
+          id={doc.id}
+          filename={doc.filename}
+          contentType={doc.content_type}
+          createdAt={doc.created_at}
+          onDelete={handleDelete}
+        />
       ))}
     </div>
   )

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { auth } from '@/auth'
 import { Session } from '@/lib/types'
 import { sql } from '@vercel/postgres'
+import { getDocuments } from '@/app/actions/getDocuments'
 
 export default async function DocumentList() {
   const session = (await auth()) as Session
@@ -10,21 +11,16 @@ export default async function DocumentList() {
     return <div>Please log in to view your documents.</div>
   }
 
-  const documents = await sql`
-    SELECT id, filename, blob_url, content_type, created_at 
-    FROM documents 
-    WHERE user_id = ${session.user.id} 
-    ORDER BY created_at DESC
-  `
+  const documents = await getDocuments(false)
 
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold">Your Documents</h2>
-      {documents.rows.length === 0 ? (
+      {documents.length === 0 ? (
         <p>You haven&apos;t uploaded any documents yet.</p>
       ) : (
         <ul className="divide-y divide-gray-200">
-          {documents.rows.map(doc => (
+          {documents.map(doc => (
             <li key={doc.id} className="py-4">
               <div className="flex items-center space-x-4">
                 <div className="flex-1 min-w-0">
