@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { put } from '@vercel/blob'
 import { Readable } from 'stream'
+import { auth } from '@/auth'
+import { sql } from '@vercel/postgres'
 
 // Define a type for our progress callback
 type ProgressCallback = (progress: number) => void
@@ -29,6 +31,12 @@ class UploadProgressTracker {
 }
 
 export async function POST(request: NextRequest) {
+  const session = await auth()
+  // Check if the user is authenticated
+  if (!session || !session.user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const formData = await request.formData()
   const file = formData.get('file') as File | null
 
@@ -45,7 +53,17 @@ export async function POST(request: NextRequest) {
       UploadProgressTracker.getInstance().setProgress(progress)
     })
 
-    return NextResponse.json({ url: blob.url })
+    // Store document metadata in the database
+    const result = await sql`
+      INSERT INTO documents (user_id, filename, blob_url, content_type)
+      VALUES (${session.user.id}, ${file.name}, ${blob.url}, ${file.type})
+      RETURNING id
+    `
+
+    return NextResponse.json({
+      message: 'File uploaded successfully',
+      documentId: result.rows[0].id
+    })
   } catch (error) {
     console.error('Error uploading to Vercel Blob:', error)
     return NextResponse.json({ error: 'Upload failed' }, { status: 500 })

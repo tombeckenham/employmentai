@@ -45,7 +45,7 @@ const LandingPage: React.FC = () => {
           decoding offers, and negotiating like a pro.
         </p>
         <Link
-          href="/dashboard"
+          href="/documents"
           className="inline-block bg-gradient-button text-gray-800 font-bold text-lg px-8 py-3 rounded-full transition-all duration-300 ease-in-out hover:shadow-lg relative overflow-hidden group"
         >
           <span className="relative z-10">Get your score</span>
@@ -128,7 +128,7 @@ const LandingPage: React.FC = () => {
             your next career move.
           </p>
           <Link
-            href="/dashboard"
+            href="/documents"
             className="inline-block bg-gradient-button text-gray-800 font-bold text-lg px-8 py-3 rounded-full transition-all duration-300 ease-in-out hover:shadow-lg relative overflow-hidden group"
           >
             <span className="relative z-10">Start your analysis</span>

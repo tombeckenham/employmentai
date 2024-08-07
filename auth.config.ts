@@ -18,7 +18,7 @@ export const authConfig = {
       if (isOnSignIn || isOnSignUp || isOnHome) {
         if (isLoggedIn) {
           console.log('User is already logged in')
-          return Response.redirect(new URL('/dashboard', nextUrl))
+          return Response.redirect(new URL('/documents', nextUrl))
         }
         return true
       }
