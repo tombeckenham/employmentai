@@ -34,8 +34,8 @@ Candidate Details:
 - Sector Experience: {sectorExperience}
 - Management Experience: {managementExperience}
 
-Please provide your salary estimate in the following format:
-Estimated Salary Range: $X - $Y
+Please provide your salary estimate in the following format - but in local currency:
+Estimated Salary Range: $X - $Y USD
 Explanation: [Your detailed explanation here]
 
 Be sure to consider all factors, including location, company size, funding stage, and the candidate's experience when making your estimate.`
