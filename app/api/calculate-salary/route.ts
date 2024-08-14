@@ -25,9 +25,9 @@ Job Details:
 - Company Sector: {sector}
 - Company Size: {companySize}
 
-Additional Information:
-- Candidate Northstar Companies: {northstarCompanies}
-- Unusual Role Requirements: {unusualRequirements}
+Employer pays a premium for candidates who has:
+- Relevant work experience at these 'North Star' companies: {northstarCompanies}
+- These specific skills: {unusualRequirements}
 
 Candidate Details:
 - Years of Experience: {experience}
