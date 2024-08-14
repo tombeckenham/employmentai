@@ -13,6 +13,12 @@ export const authConfig = {
       const isOnSignIn = nextUrl.pathname.startsWith('/login')
       const isOnSignUp = nextUrl.pathname.startsWith('/signup')
 
+      // Let the user get to this page
+      const isOnSalary = nextUrl.pathname.startsWith('/salary')
+      if (isOnSalary) {
+        return true
+      }
+
       const isOnHome = nextUrl.pathname === '/'
 
       if (isOnSignIn || isOnSignUp || isOnHome) {
