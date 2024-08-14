@@ -7,7 +7,7 @@ import { StringOutputParser } from '@langchain/core/output_parsers'
 
 // Initialize the ChatOpenAI model
 const model = new ChatOpenAI({
-  modelName: 'gpt-4-0613',
+  modelName: 'gpt-4o-mini',
   temperature: 0.0,
   openAIApiKey: process.env.OPENAI_API_KEY
 })

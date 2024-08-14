@@ -6,8 +6,8 @@ import { RunnableSequence } from '@langchain/core/runnables'
 import { StringOutputParser } from '@langchain/core/output_parsers'
 
 const model = new ChatOpenAI({
-  modelName: 'gpt-4-0613',
-  temperature: 0.7,
+  modelName: 'gpt-4o-mini',
+  temperature: 0.0,
   openAIApiKey: process.env.OPENAI_API_KEY
 })
 

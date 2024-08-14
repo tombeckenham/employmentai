@@ -3,11 +3,12 @@
 
 import React, { useState } from 'react'
 import { useSalaryCalculator } from '../lib/hooks/use-salary-calculator'
+import ReactMarkdown from 'react-markdown'
 
 export function SalaryEstimate() {
   const { jobDetails, employeeDetails } = useSalaryCalculator()
   const [estimatedSalary, setEstimatedSalary] = useState<string | null>(null)
-  const [explanation, setExplanation] = useState<string | null>(null)
+  const [explanation, setExplanation] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -72,7 +73,7 @@ export function SalaryEstimate() {
             <p className="text-3xl font-bold text-indigo-600">
               {estimatedSalary} per year
             </p>
-            <p className="mt-2 text-sm text-gray-500">{explanation}</p>
+            <ReactMarkdown>{explanation}</ReactMarkdown>
           </>
         ) : (
           <p className="text-gray-600">
