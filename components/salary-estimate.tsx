@@ -14,22 +14,25 @@ export function SalaryEstimate() {
     setError(null)
 
     try {
-      // First, analyze the company
-      const companyResponse = await fetch('/api/analyze-company', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          company: jobDetails.company,
-          jobTitle: jobDetails.jobTitle,
-          jobDescription: jobDetails.jobDescription
+      let companyAnalysis = {}
+      if (jobDetails.company) {
+        // First, analyze the company
+        const companyResponse = await fetch('/api/analyze-company', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            company: jobDetails.company,
+            jobTitle: jobDetails.jobTitle,
+            jobDescription: jobDetails.jobDescription
+          })
         })
-      })
 
-      if (!companyResponse.ok) {
-        throw new Error('Company analysis failed')
+        if (!companyResponse.ok) {
+          throw new Error('Company analysis failed')
+        }
+
+        companyAnalysis = await companyResponse.json()
       }
-
-      const companyAnalysis = await companyResponse.json()
 
       // Then, calculate the salary
       const salaryResponse = await fetch('/api/calculate-salary', {
@@ -84,9 +87,7 @@ export function SalaryEstimate() {
         {error && <p className="text-red-600 mt-2">{error}</p>}
         <button
           onClick={calculateSalary}
-          disabled={
-            loading || !jobDetails.jobTitle || !employeeDetails.experience
-          }
+          disabled={loading || !jobDetails.jobTitle || !jobDetails.location}
           className="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-300 disabled:cursor-not-allowed"
         >
           {loading ? 'Calculating...' : 'Calculate Salary'}
