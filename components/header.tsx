@@ -24,19 +24,15 @@ export async function UserOrLogin() {
         {session?.user ? (
           <UserMenu user={session.user} />
         ) : (
-          <div className="flex items-center">
-            <Link
-              href="/login"
-              className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-            >
+          <div className="flex items-center space-x-4">
+            <Link href="/login" className="text-gray-800 font-bold text-sm ">
               Login
             </Link>
             <Link
               href="/signup"
-              className="inline-block bg-gradient-button text-gray-800 font-bold text-sm px-4 py-2 rounded-full transition-all duration-300 ease-in-out hover:shadow-lg relative overflow-hidden group"
+              className="bg-white text-indigo-600 px-4 py-2 rounded-full font-semibold hover:bg-indigo-100 transition-colors"
             >
-              <span className="relative z-10">Sign up</span>
-              <span className="shine-effect group-hover:animate-shine"></span>
+              Sign up
             </Link>
           </div>
         )}
@@ -45,33 +41,38 @@ export async function UserOrLogin() {
   )
 }
 
-export function Header() {
+export const Header = () => {
   return (
-    <header className="sticky top-0 z-50 w-full bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <Link href="/" className="font-bold text-xl">
-              Employment AI
-            </Link>
-            <div className="hidden md:block">
-              <nav className="ml-10 flex items-baseline space-x-4">
-                <Link
-                  href="/pricing"
-                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Pricing
-                </Link>
-              </nav>
-            </div>
-          </div>
-          <div className="flex items-center">
-            <React.Suspense fallback={<div>Loading...</div>}>
-              <UserOrLogin />
-            </React.Suspense>
-          </div>
+    <header className="fixed top-0 inset-x-0 z-50">
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-pink-300/70 via-purple-300/70 to-indigo-400/70 backdrop-blur-md opacity-0 transition-opacity duration-300"
+        id="header-bg"
+      />
+      <nav className="container mx-auto px-6 py-4 flex justify-between items-center relative z-10">
+        <div className="flex items-center">
+          <svg className="size-10 mr-2" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="36" fill="url(#gradient)" />
+            <path
+              d="M40 15 v50 M32 23 h16 M32 57 h16 M32 40 h16"
+              stroke="#FFFFFF"
+              strokeWidth="6"
+              strokeLinecap="round"
+            />
+            <path
+              d="M40 15 L30 40 L40 40 L25 65 L50 40 L40 40 L50 15 Z"
+              fill="#FFFFFF"
+            />
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#4F46E5" />
+                <stop offset="100%" stopColor="#EC4899" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <span className="text-2xl font-bold">Employment AI</span>
         </div>
-      </div>
+        <UserOrLogin />
+      </nav>
     </header>
   )
 }

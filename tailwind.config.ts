@@ -55,6 +55,7 @@ const config: Config = {
           400: '#facc15',
           300: '#fde047'
         },
+        'logo-purple': '#4F46E5',
 
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

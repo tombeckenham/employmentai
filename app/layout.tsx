@@ -9,6 +9,7 @@ import { Providers } from '@/components/providers'
 import { Header } from '@/components/header'
 import { Toaster } from '@/components/ui/sonner'
 import DemoNotice from '@/components/demo-notice'
+import { HeaderScroll } from '@/components/header-scroll'
 
 export const metadata = {
   metadataBase: new URL(`https://${process.env.VERCEL_URL}`),
@@ -52,8 +53,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex flex-col min-h-screen">
+          <div className="min-h-screen bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-400 text-gray-800 font-sans">
             <Header />
+            <HeaderScroll />
             <main className="flex flex-col flex-1 bg-muted/50">{children}</main>
             <DemoNotice /> {/* Include the DemoNotice component */}
           </div>
