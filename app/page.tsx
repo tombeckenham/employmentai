@@ -1,13 +1,8 @@
-'use client'
-
-import React, { useState } from 'react'
+import React from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, DollarSign, Zap, Briefcase } from 'lucide-react'
 
-const LandingPage = () => {
-  const [occupation, setOccupation] = useState('')
-  const [location, setLocation] = useState('')
-
+const LandingPage = async () => {
   return (
     <>
       <main className="container mx-auto px-4 py-24">
@@ -23,12 +18,7 @@ const LandingPage = () => {
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="relative">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="bg-white rounded-lg shadow-xl p-8 relative"
-            >
+            <div className="bg-white rounded-lg shadow-xl p-8 relative">
               <h3 className="text-2xl font-bold mb-6">Salary Estimate Tool</h3>
               <form className="space-y-4">
                 <div>
@@ -38,12 +28,9 @@ const LandingPage = () => {
                   >
                     Occupation
                   </label>
-                  <motion.input
-                    whileFocus={{ scale: 1.02 }}
+                  <input
                     type="text"
                     id="occupation"
-                    value={occupation}
-                    onChange={e => setOccupation(e.target.value)}
                     className="w-full px-4 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     placeholder="e.g. Software Engineer"
                   />
@@ -55,37 +42,25 @@ const LandingPage = () => {
                   >
                     Location
                   </label>
-                  <motion.input
-                    whileFocus={{ scale: 1.02 }}
+                  <input
                     type="text"
                     id="location"
-                    value={location}
-                    onChange={e => setLocation(e.target.value)}
                     className="w-full px-4 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     placeholder="e.g. New York"
                   />
                 </div>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full bg-gradient-to-r from-indigo-600 to-pink-500 text-white font-bold py-3 px-6 rounded-md flex items-center justify-center"
-                >
+                <button className="w-full bg-gradient-to-r from-indigo-600 to-pink-500 text-white font-bold py-3 px-6 rounded-md flex items-center justify-center">
                   Get Your Estimate <ArrowRight className="ml-2" />
-                </motion.button>
+                </button>
               </form>
-            </motion.div>
+            </div>
             <div className="absolute -top-12 -right-12 size-24 bg-yellow-300 rounded-full flex items-center justify-center text-indigo-600 font-bold text-xl rotate-12 z-10">
               Free!
             </div>
           </div>
 
           <div className="space-y-8">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white rounded-lg shadow-md p-6 flex items-center"
-            >
+            <div className="bg-white rounded-lg shadow-md p-6 flex items-center">
               <DollarSign className="text-green-500 mr-4" size={32} />
               <div>
                 <h4 className="text-xl font-semibold mb-1">
@@ -95,13 +70,8 @@ const LandingPage = () => {
                   Get AI-driven insights to negotiate better compensation.
                 </p>
               </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="bg-white rounded-lg shadow-md p-6 flex items-center"
-            >
+            </div>
+            <div className="bg-white rounded-lg shadow-md p-6 flex items-center">
               <Zap className="text-yellow-500 mr-4" size={32} />
               <div>
                 <h4 className="text-xl font-semibold mb-1">
@@ -111,13 +81,8 @@ const LandingPage = () => {
                   Access real-time market data and industry insights.
                 </p>
               </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="bg-white rounded-lg shadow-md p-6 flex items-center"
-            >
+            </div>
+            <div className="bg-white rounded-lg shadow-md p-6 flex items-center">
               <Briefcase className="text-indigo-500 mr-4" size={32} />
               <div>
                 <h4 className="text-xl font-semibold mb-1">
@@ -127,7 +92,7 @@ const LandingPage = () => {
                   Get personalized career path recommendations.
                 </p>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </main>
@@ -212,13 +177,9 @@ const LandingPage = () => {
             Join thousands of professionals using AI to make informed career
             decisions.
           </p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-white text-indigo-600 font-bold py-3 px-8 rounded-full text-lg hover:bg-indigo-50 transition duration-300"
-          >
+          <button className="bg-white text-indigo-600 font-bold py-3 px-8 rounded-full text-lg hover:bg-indigo-50 transition duration-300">
             Get Started For Free
-          </motion.button>
+          </button>
         </div>
       </section>
 

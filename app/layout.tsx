@@ -56,8 +56,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <div className="min-h-screen bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-400 text-gray-800 font-sans">
             <Header />
             <HeaderScroll />
-            <main className="flex flex-col flex-1 bg-muted/50">{children}</main>
-            <DemoNotice /> {/* Include the DemoNotice component */}
+            <main className="flex flex-col flex-1 bg-muted/50 pt-16">
+              {children}
+            </main>
+            <DemoNotice />
           </div>
           <TailwindIndicator />
         </Providers>

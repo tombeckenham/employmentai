@@ -49,7 +49,7 @@ export const Header = () => {
         id="header-bg"
       />
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center relative z-10">
-        <div className="flex items-center">
+        <Link href="/" className="flex items-center">
           <svg className="size-10 mr-2" viewBox="0 0 80 80">
             <circle cx="40" cy="40" r="36" fill="url(#gradient)" />
             <path
@@ -70,7 +70,7 @@ export const Header = () => {
             </defs>
           </svg>
           <span className="text-2xl font-bold">Employment AI</span>
-        </div>
+        </Link>
         <UserOrLogin />
       </nav>
     </header>
