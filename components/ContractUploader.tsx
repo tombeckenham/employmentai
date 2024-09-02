@@ -62,9 +62,6 @@ const ContractUpload: React.FC = () => {
 
       const data = await response.json()
 
-      // This is the document URL we need to pass to the RAG creation API
-      console.log('File uploaded:', data.documentId)
-
       // Redirect to the contract analysis page
       router.push('/report')
     } catch (error) {

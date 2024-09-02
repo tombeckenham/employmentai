@@ -1,49 +1,76 @@
-import Link from 'next/link'
-import { auth } from '@/auth'
-import { Session } from '@/lib/types'
 import { sql } from '@vercel/postgres'
-import { getDocuments } from '@/app/actions/getDocuments'
+import DocumentCard from '@/components/document-card'
+import { getDocuments } from '../app/actions/getDocuments'
+import { softDeleteDocument } from '../app/actions/softDeleteDocument'
 
-export default async function DocumentList() {
-  const session = (await auth()) as Session
+async function DocumentList() {
+  const documents = await getDocuments()
 
-  if (!session || !session.user) {
-    return <div>Please log in to view your documents.</div>
+  async function handleDelete(id: string) {
+    'use server'
+    await softDeleteDocument(id)
   }
 
-  const documents = await getDocuments(false)
+  async function getClassifiedDocuments(): Promise<
+    Record<string, Record<string, any[]>>
+  > {
+    const { rows: documents } = await sql`
+      SELECT d.id, d.filename, d.content_type, d.created_at, dr.document_type AS documentType, o.name AS organization, p.name AS relatedPerson
+      FROM documents d
+      JOIN document_reports dr ON d.id = dr.document_id
+      JOIN organizations o ON dr.organization_id = o.id
+      JOIN people p ON dr.related_person_id = p.id
+      WHERE d.deleted_at IS NULL
+    `
+
+    const groupedDocuments = documents.reduce((acc: any, doc: any) => {
+      const { organization, relatedperson: relatedPerson } = doc
+      if (!acc[organization]) {
+        acc[organization] = {}
+      }
+      if (!acc[organization][relatedPerson]) {
+        acc[organization][relatedPerson] = []
+      }
+      acc[organization][relatedPerson].push(doc)
+      return acc
+    }, {})
+
+    return groupedDocuments
+  }
+
+  const classifiedDocuments = await getClassifiedDocuments()
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Your Documents</h2>
-      {documents.length === 0 ? (
-        <p>You haven&apos;t uploaded any documents yet.</p>
-      ) : (
-        <ul className="divide-y divide-gray-200">
-          {documents.map(doc => (
-            <li key={doc.id} className="py-4">
-              <div className="flex items-center space-x-4">
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
-                    {doc.filename}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Uploaded on {new Date(doc.created_at).toLocaleDateString()}
-                  </p>
-                </div>
-                <div>
-                  <Link
-                    href={doc.blob_url}
-                    className="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50"
-                  >
-                    View
-                  </Link>
-                </div>
+    <div className="space-y-6">
+      {Object.entries(classifiedDocuments).map(([company, people]) => (
+        <div key={company} className="bg-white p-4 rounded-lg shadow-md">
+          <h2 className="text-xl font-bold mb-4 text-black">{company}</h2>
+          {Object.entries(people).map(([person, docs]) => (
+            <div key={person} className="ml-4">
+              <h3 className="text-lg font-semibold mb-2 text-black">
+                {person}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {docs.map((doc: any) => (
+                  <DocumentCard
+                    key={doc.id}
+                    id={doc.id}
+                    filename={doc.filename}
+                    contentType={doc.content_type}
+                    createdAt={doc.created_at}
+                    onDelete={handleDelete}
+                    documentType={doc.documentType} // Add document type as a label
+                    relatedPerson={doc.relatedPerson}
+                    company={doc.associatedCompany}
+                  />
+                ))}
               </div>
-            </li>
+            </div>
           ))}
-        </ul>
-      )}
+        </div>
+      ))}
     </div>
   )
 }
+
+export default DocumentList
