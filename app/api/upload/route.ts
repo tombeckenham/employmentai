@@ -3,6 +3,8 @@ import { put } from '@vercel/blob'
 import { Readable } from 'stream'
 import { auth } from '@/auth'
 import { sql } from '@vercel/postgres'
+import { generateContractReport } from '@/lib/reportGenerator'
+import { triggerBackgroundJob } from '@/lib/backgroundJobs' // New import
 
 // Define a type for our progress callback
 type ProgressCallback = (progress: number) => void
@@ -52,13 +54,19 @@ export async function POST(request: NextRequest) {
     const blob = await uploadWithProgress(filename, buffer, progress => {
       UploadProgressTracker.getInstance().setProgress(progress)
     })
-
     // Store document metadata in the database
     const result = await sql`
       INSERT INTO documents (user_id, filename, blob_url, content_type)
       VALUES (${session.user.id}, ${file.name}, ${blob.url}, ${file.type})
       RETURNING id
     `
+
+    const documentId = result.rows[0].id
+
+    // Trigger background job for report generation
+    await triggerBackgroundJob('generateReport', {
+      documentId
+    })
 
     return NextResponse.json({
       message: 'File uploaded successfully',
