@@ -1,22 +1,24 @@
-'use server'
-import { notFound } from 'next/navigation'
-import { generateContractReport } from '@/lib/reportGenerator'
-import { getDocumentById, getDocuments } from '@/app/actions/getDocuments'
 import ContractAnalysis from '@/components/contract-analysis-detailed'
+import { getReportForDocument } from '@/app/actions/reportFetcher'
+import { triggerBackgroundJob } from '@/lib/backgroundJobs'
+import { getDocumentById } from '@/app/actions/getDocuments'
 
 export default async function ReportPage({
   params
 }: {
   params: { id: string }
 }) {
-  console.log('params:', params)
   const document = await getDocumentById(params.id)
 
   if (!document) {
-    notFound()
+    return <div>Document not found</div>
   }
 
-  const report = await generateContractReport(document.blob_url)
+  const report = await getReportForDocument(document.id)
+
+  if (!report) {
+    return <div>Report generation in progress...</div>
+  }
 
   return (
     <>
