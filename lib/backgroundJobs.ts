@@ -7,10 +7,9 @@ const qstash = new Client({
 })
 
 export async function triggerBackgroundJob(jobType: string, data: any) {
-  const webhookUrl =
-    process.env.WEBHOOK_URL ||
-    'https://seasnail-ethical-personally.ngrok-free.app/api/process-report'
+  const webhookUrl = `https://${process.env.VERCEL_URL || process.env.WEBHOOK_URL}/api/process-report`
 
+  console.log('webhookUrl', webhookUrl)
   await qstash.publishJSON({
     url: webhookUrl,
     body: { jobType, ...data }
