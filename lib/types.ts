@@ -31,14 +31,31 @@ export interface AuthResult {
 
 export interface Section {
   sectionTitle: string
-  evaluation: 'fair' | 'favors employer' | 'favors employee'
+  evaluation: string
   reason: string
-  normalPractice: 'yes' | 'no'
+  normalPractice: string
+  riskLevel: string
+  recommendation: string
 }
 
 export interface ContractReport {
   documentType: string
   organization: string
-  relatedPerson: string
+  employee: string // Changed from relatedPerson
+  role: string
+  salary: number
+  salaryCurrency: string
+  jobDescription: string
+  contractType: string
+  contractDate: string
+  summary: {
+    startDate: string
+    vacationDays: string
+    noticePeriod: string
+  }
+  highlights: {
+    positive: string[]
+    negative: string[]
+  }
   sections: Section[]
 }

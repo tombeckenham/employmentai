@@ -1,44 +1,29 @@
-import { sql } from '@vercel/postgres'
 import DocumentCard from '@/components/document-card'
 import { getDocuments } from '../app/actions/getDocuments'
 import { softDeleteDocument } from '../app/actions/softDeleteDocument'
 
 async function DocumentList() {
-  const documents = await getDocuments()
-
   async function handleDelete(id: string) {
     'use server'
     await softDeleteDocument(id)
   }
 
-  async function getClassifiedDocuments(): Promise<
-    Record<string, Record<string, any[]>>
-  > {
-    const { rows: documents } = await sql`
-      SELECT d.id, d.filename, d.content_type, d.created_at, dr.document_type AS documentType, o.name AS organization, p.name AS relatedPerson
-      FROM documents d
-      JOIN document_reports dr ON d.id = dr.document_id
-      JOIN organizations o ON dr.organization_id = o.id
-      JOIN people p ON dr.related_person_id = p.id
-      WHERE d.deleted_at IS NULL
-    `
+  const documents = await getDocuments()
 
-    const groupedDocuments = documents.reduce((acc: any, doc: any) => {
-      const { organization, relatedperson: relatedPerson } = doc
+  const classifiedDocuments = documents.reduce(
+    (acc: Record<string, Record<string, any[]>>, doc: any) => {
+      const { organization, employee } = doc
       if (!acc[organization]) {
         acc[organization] = {}
       }
-      if (!acc[organization][relatedPerson]) {
-        acc[organization][relatedPerson] = []
+      if (!acc[organization][employee]) {
+        acc[organization][employee] = []
       }
-      acc[organization][relatedPerson].push(doc)
+      acc[organization][employee].push(doc)
       return acc
-    }, {})
-
-    return groupedDocuments
-  }
-
-  const classifiedDocuments = await getClassifiedDocuments()
+    },
+    {}
+  )
 
   return (
     <div className="space-y-6">

@@ -1,6 +1,5 @@
 import ContractAnalysis from '@/components/contract-analysis-detailed'
 import { getReportForDocument } from '@/app/actions/reportFetcher'
-import { triggerBackgroundJob } from '@/lib/backgroundJobs'
 import { getDocumentById } from '@/app/actions/getDocuments'
 
 export default async function ReportPage({
@@ -22,7 +21,7 @@ export default async function ReportPage({
 
   return (
     <>
-      <ContractAnalysis />
+      <ContractAnalysis report={report} />
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Document Report</h1>
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
@@ -38,12 +37,27 @@ export default async function ReportPage({
             <dl className="sm:divide-y sm:divide-gray-200">
               <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">
-                  AI-Generated Report
+                  Document Type
                 </dt>
-                <dd className="mt-1 text-lg text-gray-900 sm:mt-0 sm:col-span-2 whitespace-pre-wrap">
-                  {`${report}`}
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {report.documentType}
                 </dd>
               </div>
+              <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">
+                  Organization
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {report.organization}
+                </dd>
+              </div>
+              <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">Employee</dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {report.employee}
+                </dd>
+              </div>
+              {/* Add more fields as needed */}
             </dl>
           </div>
         </div>
