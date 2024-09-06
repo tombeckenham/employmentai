@@ -38,21 +38,29 @@ export interface Section {
   recommendation: string
 }
 
-export interface ContractReport {
-  documentType: string
-  organization: string
-  employee: string // Changed from relatedPerson
-  role: string
-  salary: number
-  salaryCurrency: string
-  jobDescription: string
-  contractType: string
-  contractDate: string
-  summary: {
-    startDate: string
-    vacationDays: string
-    noticePeriod: string
-  }
+export interface ContractData {
+  documentType:
+    | 'employment contract'
+    | 'offer letter'
+    | 'termination letter'
+    | 'performance review'
+    | 'pay slip'
+    | 'other'
+    | undefined
+  employer: string | undefined
+  employee: string | undefined
+  role: string | undefined
+  salary: number | undefined
+  salaryCurrency: string | undefined
+  jobDescription: string | undefined
+  contractType: string | undefined
+  contractDate: string | undefined
+  startDate: string | undefined
+  vacationDays: string | undefined
+  noticePeriod: string | undefined
+}
+
+export interface ContractReport extends ContractData {
   highlights: {
     positive: string[]
     negative: string[]

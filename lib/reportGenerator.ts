@@ -1,6 +1,14 @@
-import { sql } from '@/lib/db'
-import { processPDFsAndAnswerQuestions } from './documentAnalysis'
-import { ContractReport } from './types'
+import { getDocsFromPDF } from './documentAnalysis'
+import { ContractReport, ContractData } from './types'
+import { ChatOpenAI } from '@langchain/openai'
+import { PromptTemplate } from '@langchain/core/prompts'
+import { JsonOutputParser } from '@langchain/core/output_parsers'
+import { RunnableSequence } from '@langchain/core/runnables'
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
+import { Document } from '@langchain/core/documents'
+import { LangChainTracer } from 'langchain/callbacks'
+
+import { z } from 'zod'
 
 const employmentDocumentTypes = [
   'employment contract',
@@ -8,15 +16,26 @@ const employmentDocumentTypes = [
   'termination letter',
   'performance review',
   'pay slip',
-  'other document'
+  'other'
 ]
 
 const prompt = `
-  You are an expert in employment documents. Analyze the following employment contract and provide a detailed report with the following sections:
+  You are an expert in employment documents. Analyze the document and firstly determine the type of document it is. It should be one of the following types: ${employmentDocumentTypes.join(', ')}.
+  If it is not one of the following types or is not employment related, please respond with "other".
+  If it is some sort of employment related document, then determine who the employer and employee are. The employer will often be referred to as "Company" or "Employer" in the document. The employee will be referred to as "Employee". The company will often include a company registration number or company address in the document.
+  For an employment contract, the employer and employee will be listed as the parties to the contract. The contract is between the employer and employee. Look for a title or section that refers to these parties and use that to determine who the employer and employee are.
+  If you are unable to determine who the employer or employee is, please respond with "unknown".
+ 
+  If it is an employment contract, then analyze the document and provide a detailed report with the following sections:
 
   1. Document Classification:
      - Classify the document into one of the following types: ${employmentDocumentTypes.join(', ')}.
-     - Extract the name of the organization, the name of the employee, the role/position, salary (including 3 characters currency code), and job description.
+     - Extract the following information:
+       * Employer: The company name who the document is created by
+       * Employee: The full name of the person being hired
+       * Role/Position: The job title of the employee
+       * Salary: Including the amount and 3-character currency code
+       * Job Description: A brief summary of the role
 
   2. Contract Summary:
      - Salary (including 3 characters currency code)
@@ -45,8 +64,8 @@ const prompt = `
 
   {
     "documentType": "employment contract",
-    "organization": "Company Name",
-    "employee": "Employee Name",
+    "employer": "Company Name (the hiring entity)",
+    "employee": "Employee Full Name",
     "role": "Job Title",
     "salary": 75000,
     "salaryCurrency": "USD",
@@ -75,32 +94,180 @@ const prompt = `
     ]
   }
 
+  Important: The 'employer' field must contain only the name of the company that is hiring, typically referred to as "Company" or "Employer" in the contract. Do not include any other entities mentioned in the contract.
+
   Document content: {context}
 `
+
+const contractSchema = z.object({
+  documentType: z
+    .enum([
+      'employment contract',
+      'offer letter',
+      'termination letter',
+      'performance review',
+      'pay slip',
+      'other'
+    ])
+    .optional()
+    .describe('Type of employment document'),
+  employer: z.string().optional().describe('Company Name (the hiring entity)'),
+  employee: z.string().optional().describe('Employee Full Name'),
+  role: z.string().optional().describe('Job Title'),
+  salary: z.number().optional().describe('Salary amount'),
+  salaryCurrency: z.string().optional().describe('Salary currency code'),
+  jobDescription: z.string().optional().describe('Brief job description'),
+  contractType: z
+    .enum(['Full-time', 'Part-time', 'Contract'])
+    .optional()
+    .describe('Contract type'),
+  contractDate: z.string().optional().describe('YYYY-MM-DD').optional(),
+  startDate: z.string().optional().describe('YYYY-MM-DD'),
+  vacationDays: z.string().optional().describe('Number of days'),
+  noticePeriod: z.string().optional().describe('Notice period duration')
+})
+
+const model = new ChatOpenAI({
+  modelName: 'gpt-4o-mini',
+  temperature: 0
+})
+
+const structuredLlm = model.withStructuredOutput(contractSchema)
+
+const extractionPrompt = PromptTemplate.fromTemplate(`
+You are an expert in employment documents. Extract the following information from the given document:
+
+{format_instructions}
+
+Document content: {context}
+`)
+
+const extractionOutputParser = new JsonOutputParser<ContractData>()
+
+const tracer = new LangChainTracer()
+
+const extractionChain = RunnableSequence.from([
+  extractionPrompt,
+  new ChatOpenAI({ modelName: 'gpt-4o-mini', temperature: 0 }),
+  extractionOutputParser
+]).withConfig({ callbacks: [tracer] })
+
+const analysisPrompt = PromptTemplate.fromTemplate(`
+You are an expert in analyzing employment contracts. Given the following extracted contract data and full document content, provide an analysis including highlights and an evaluation of each section:
+
+Contract Data:
+{contract_data}
+
+Full Document Content:
+{full_content}
+
+Provide your analysis in the following format:
+
+{format_instructions}
+`)
+
+const analysisOutputParser = new JsonOutputParser<ContractReport>()
+
+const analysisChain = RunnableSequence.from([
+  analysisPrompt,
+  new ChatOpenAI({ modelName: 'gpt-4o-mini', temperature: 0 }),
+  analysisOutputParser
+]).withConfig({ callbacks: [tracer] })
+
+async function getDocumentContent(contractUrl: string): Promise<Document[]> {
+  return await getDocsFromPDF(contractUrl)
+}
+
+async function splitDocumentsIntoChunks(docs: Document[]): Promise<Document[]> {
+  const splitter = new RecursiveCharacterTextSplitter({
+    chunkSize: 1000,
+    chunkOverlap: 100
+  })
+  return await splitter.splitDocuments(docs)
+}
+
+function mergePartialData(partialData: ContractData[]): ContractData {
+  return partialData.reduce(
+    (merged, current) => ({
+      ...merged,
+      ...current
+    }),
+    {} as ContractData
+  )
+}
+
+function mergePartialReports(
+  partialReports: ContractReport[]
+): Partial<ContractReport> {
+  return partialReports.reduce(
+    (merged, current) => ({
+      ...merged,
+      ...current,
+      highlights: {
+        positive: [
+          ...(merged.highlights?.positive || []),
+          ...(current.highlights?.positive || [])
+        ].filter((v, i, a) => a.indexOf(v) === i),
+        negative: [
+          ...(merged.highlights?.negative || []),
+          ...(current.highlights?.negative || [])
+        ].filter((v, i, a) => a.indexOf(v) === i)
+      },
+      sections: [
+        ...(merged.sections || []),
+        ...(current.sections || [])
+      ].filter(
+        (section, index, self) =>
+          index === self.findIndex(t => t.sectionTitle === section.sectionTitle)
+      )
+    }),
+    { highlights: { positive: [], negative: [] } } as Partial<ContractReport>
+  )
+}
 
 export async function generateContractReport(
   contractUrl: string
 ): Promise<ContractReport> {
   try {
-    const text = await processPDFsAndAnswerQuestions([contractUrl], prompt)
-    const reportData = JSON.parse(text)
+    const docs = await getDocumentContent(contractUrl)
+    const chunks = await splitDocumentsIntoChunks(docs)
 
-    const report: ContractReport = {
-      documentType: reportData.documentType,
-      organization: reportData.organization,
-      employee: reportData.employee, // Changed from relatedPerson
-      role: reportData.role,
-      salary: reportData.salary,
-      salaryCurrency: reportData.salaryCurrency,
-      jobDescription: reportData.jobDescription,
-      contractType: reportData.contractType,
-      contractDate: reportData.contractDate,
-      summary: reportData.summary,
-      highlights: reportData.highlights,
-      sections: reportData.sections
-    }
+    // Extract data from chunks
+    const extractedDataResults = await structuredLlm.batch(
+      chunks.map(
+        chunk =>
+          `Analyze this part of the employment document and return only the information you can determine accurately, otherwise omit the field. Don't return any other text or null values: ${chunk.pageContent}`
+      )
+    )
+    console.log('Extracted data results:', extractedDataResults)
+    const extractedData = mergePartialData(
+      extractedDataResults as ContractData[]
+    )
 
-    return report
+    console.log('Extracted data:', extractedData)
+    /* // Analyze chunks
+    const partialReports = await analysisChain.batch(
+      chunks.map(chunk => ({
+        contract_data: JSON.stringify(extractedData),
+        full_content: chunk.pageContent,
+        format_instructions: analysisOutputParser.getFormatInstructions()
+      }))
+    )
+
+    console.log('Partial reports:', partialReports)
+
+    const mergedReport = mergePartialReports(partialReports)
+
+    console.log('Merged report:', mergedReport)
+
+    return {
+      ...extractedData,
+      ...mergedReport
+    } as ContractReport */
+
+    return {
+      ...extractedData
+    } as ContractReport
   } catch (error) {
     console.error('Error generating contract report:', error)
     throw error

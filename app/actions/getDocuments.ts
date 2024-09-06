@@ -11,21 +11,21 @@ export async function getDocuments(includeDeleted: boolean = false) {
   const documents = includeDeleted
     ? await sql`
     SELECT d.id, d.filename, d.blob_url, d.content_type, d.created_at, d.deleted_at,
-    e.name AS employee, o.name AS organization
+    e.name AS employee, emp.name AS employer
     FROM documents d
     LEFT JOIN document_reports dr ON d.id = dr.document_id
     LEFT JOIN employees e ON dr.employee_id = e.id
-    LEFT JOIN organizations o ON dr.organization_id = o.id
+    LEFT JOIN employers emp ON dr.employer_id = emp.id
     WHERE d.user_id = ${session.user.id} 
     ORDER BY d.created_at DESC
     `
     : await sql`
     SELECT d.id, d.filename, d.blob_url, d.content_type, d.created_at, d.deleted_at,
-    e.name AS employee, o.name AS organization
+    e.name AS employee, emp.name AS employer
     FROM documents d
     LEFT JOIN document_reports dr ON d.id = dr.document_id
     LEFT JOIN employees e ON dr.employee_id = e.id
-    LEFT JOIN organizations o ON dr.organization_id = o.id
+    LEFT JOIN employers emp ON dr.employer_id = emp.id
     WHERE d.user_id = ${session.user.id} 
     AND d.deleted_at IS NULL
     ORDER BY d.created_at DESC

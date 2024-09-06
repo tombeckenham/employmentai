@@ -12,8 +12,8 @@ import {
   XCircle,
   AlertTriangle
 } from 'lucide-react'
+
 import { ContractReport } from '@/lib/types'
-import { getReportForDocument } from '@/app/actions/reportFetcher'
 
 const ContractAnalysis = ({ report }: { report: ContractReport }) => {
   const [viewMode, setViewMode] = useState('summary')
@@ -39,9 +39,7 @@ const ContractAnalysis = ({ report }: { report: ContractReport }) => {
             </div>
             <div className="flex items-center">
               <Building className="text-purple-600 mr-2" size={24} />
-              <span className="text-xl text-gray-700">
-                {report.organization}
-              </span>
+              <span className="text-xl text-gray-700">{report.employer}</span>
             </div>
           </div>
 
@@ -116,7 +114,6 @@ const ContractAnalysis = ({ report }: { report: ContractReport }) => {
                   <span className="font-medium text-gray-600">
                     Contract Date
                   </span>
-                  <span className="text-gray-800">{report.contractDate}</span>
                 </div>
               </div>
               <div className="bg-gray-50 border-l-4 border-purple-500 p-4 rounded-md">

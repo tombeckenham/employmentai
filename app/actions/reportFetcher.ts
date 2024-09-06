@@ -61,7 +61,7 @@ export async function getReportForDocument(
 
   const report: ContractReport = {
     documentType: reportData.document_type,
-    organization: reportData.organization_name,
+    employer: reportData.employer_name,
     employee: reportData.employee_name,
     role: reportData.role,
     salary: reportData.salary,

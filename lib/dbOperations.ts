@@ -7,7 +7,7 @@ export async function storeReportInDB(
 ) {
   const {
     documentType,
-    organization,
+    employer,
     employee,
     role,
     salary,
@@ -15,19 +15,21 @@ export async function storeReportInDB(
     jobDescription,
     contractType,
     contractDate,
-    summary,
+    startDate,
+    vacationDays,
+    noticePeriod,
     highlights,
     sections
   } = report
 
-  // Insert organization
-  const orgResult = await sql`
-    INSERT INTO organizations (name)
-    VALUES (${organization})
-    ON CONFLICT (name) DO NOTHING
+  // Insert employer
+  const employerResult = await sql`
+    INSERT INTO employers (name)
+    VALUES (${employer})
+    ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name
     RETURNING id
   `
-  const organizationId = orgResult.rows[0]?.id
+  const employerId = employerResult.rows[0]?.id
 
   // Insert employee
   const employeeResult = await sql`
@@ -43,14 +45,14 @@ export async function storeReportInDB(
   // Insert document report (without highlights)
   const reportResult = await sql`
     INSERT INTO document_reports (
-      document_id, document_type, organization_id, employee_id,
+      document_id, document_type, employer_id, employee_id,
       role, salary, salary_currency, job_description, contract_type, contract_date,
       summary_start_date, summary_vacation_days, summary_notice_period
     )
     VALUES (
-      ${documentId}, ${documentType}, ${organizationId}, ${employeeId},
+      ${documentId}, ${documentType}, ${employerId}, ${employeeId},
       ${role}, ${salary}, ${salaryCurrency}, ${jobDescription}, ${contractType}, ${contractDate},
-      ${summary.startDate}, ${summary.vacationDays}, ${summary.noticePeriod}
+      ${startDate}, ${vacationDays}, ${noticePeriod}
     )
     RETURNING id
   `
@@ -92,7 +94,7 @@ export async function storeReportInDB(
   }
 
   return {
-    organizationId,
+    employerId,
     employeeId,
     reportId
   }

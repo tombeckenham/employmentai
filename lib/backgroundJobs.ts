@@ -10,6 +10,7 @@ const qstash = new Client({
 export async function triggerBackgroundJob(jobType: string, data: any) {
   const webhookUrl = `https://${process.env.VERCEL_URL || process.env.WEBHOOK_URL}/api/process-report`
 
+  console.log('webhookUrl', webhookUrl, data)
   await qstash.publishJSON({
     url: webhookUrl,
     body: { jobType, ...data }
