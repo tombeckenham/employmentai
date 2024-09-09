@@ -84,25 +84,19 @@ const ContractAnalysis = ({ report }: { report: ContractReport }) => {
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200 py-2">
                   <span className="font-medium text-gray-600">Start Date</span>
-                  <span className="text-gray-800">
-                    {report.summary.startDate}
-                  </span>
+                  <span className="text-gray-800">{report.startDate}</span>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200 py-2">
                   <span className="font-medium text-gray-600">
                     Vacation Days
                   </span>
-                  <span className="text-gray-800">
-                    {report.summary.vacationDays}
-                  </span>
+                  <span className="text-gray-800">{report.vacationDays}</span>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200 py-2">
                   <span className="font-medium text-gray-600">
                     Notice Period
                   </span>
-                  <span className="text-gray-800">
-                    {report.summary.noticePeriod}
-                  </span>
+                  <span className="text-gray-800">{report.noticePeriod}</span>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200 py-2">
                   <span className="font-medium text-gray-600">
@@ -124,7 +118,7 @@ const ContractAnalysis = ({ report }: { report: ContractReport }) => {
                   </h4>
                 </div>
                 <ul className="space-y-2">
-                  {report.highlights.positive.map((item, index) => (
+                  {report.highlights?.positive?.map((item, index) => (
                     <li key={`positive-${index}`} className="flex items-start">
                       <CheckCircle
                         className="text-green-500 mr-2 shrink-0"
@@ -133,7 +127,7 @@ const ContractAnalysis = ({ report }: { report: ContractReport }) => {
                       <span className="text-green-700">{item}</span>
                     </li>
                   ))}
-                  {report.highlights.negative.map((item, index) => (
+                  {report.highlights?.negative?.map((item, index) => (
                     <li key={`negative-${index}`} className="flex items-start">
                       <XCircle
                         className="text-red-500 mr-2 shrink-0"
@@ -151,7 +145,7 @@ const ContractAnalysis = ({ report }: { report: ContractReport }) => {
                 Detailed Contract Analysis
               </h3>
 
-              {report.sections.map((section, index) => (
+              {report.sections?.map((section, index) => (
                 <div key={index} className="border-b border-gray-200 pb-4">
                   <h4 className="text-lg font-medium text-gray-700 mb-2">
                     {section.sectionTitle}
