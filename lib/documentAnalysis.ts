@@ -22,7 +22,7 @@ const embeddings = new VoyageEmbeddings({
 })
 
 // Function to extract text from PDF using PDF.js
-async function getDocsFromPDF(pdfURL: string) {
+export async function getDocsFromPDF(pdfURL: string) {
   // Create a blob from the URL
   const response = await fetch(pdfURL)
   if (!response.ok) {
@@ -32,33 +32,19 @@ async function getDocsFromPDF(pdfURL: string) {
   // Create a new PDFLoader instance
   const loader = new PDFLoader(blob, {
     // pdfjs: () => import('pdfjs-dist/legacy/build/pdf.mjs'),
+    parsedItemSeparator: '',
     splitPages: false
   })
 
   // load the doc
-  return loader.load()
-}
-
-// Function to extract text from PDF using PDF.js
-async function extractTextFromPDF(pdfURL: string): Promise<string> {
-  try {
-    // load the doc
-    const docs = await getDocsFromPDF(pdfURL)
-
-    // get the text content
-    const text = docs[0].pageContent
-
-    return text
-  } catch (error) {
-    console.error('Error extracting text from PDF:', error)
-    return ''
-  }
+  const docs = await loader.load()
+  return docs
 }
 
 function splitDocsIntoChunks(
   docs: Document[],
-  chunkSize = 1000,
-  overlap = 200
+  chunkSize = 2000, // Increased from 1000
+  overlap = 300 // Increased from 200
 ): Promise<Document[]> {
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: chunkSize,
@@ -73,6 +59,7 @@ const systemTemplate = [
   `There is no need to say anything about this not being legal advice and don't point out that you are not a lawyer, we have text elsewhere that indicates that.`,
   `You should provide information on the policies and how they may affect the employee.`,
   `If you don't know the answer to a question, you can say "I don't know" or "I'm not sure".`,
+  `When relevant, always try to identify and mention the employer's name from the documents.`,
   `\n\n`,
   `{context}`
 ].join('')
@@ -98,7 +85,9 @@ export async function processPDFsAndAnswerQuestions(
   const vectorStore = await MemoryVectorStore.fromDocuments(splits, embeddings)
 
   // Get a retriever
-  const retriever = vectorStore.asRetriever()
+  const retriever = vectorStore.asRetriever({
+    k: 5 // Retrieve top 5 most relevant chunks instead of the default
+  })
 
   // Create the question-answer chain
   const questionAnswerChain = await createStuffDocumentsChain({

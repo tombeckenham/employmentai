@@ -10,6 +10,9 @@ interface DocumentCardProps {
   contentType: string
   createdAt: string
   onDelete: (id: string) => Promise<void>
+  documentType: string
+  relatedPerson: string
+  company: string
 }
 
 export default function DocumentCard({
@@ -17,7 +20,10 @@ export default function DocumentCard({
   filename,
   contentType,
   createdAt,
-  onDelete
+  onDelete,
+  documentType,
+  relatedPerson,
+  company
 }: DocumentCardProps) {
   const [isDeleting, setIsDeleting] = useState(false)
 
@@ -36,20 +42,25 @@ export default function DocumentCard({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 flex flex-col justify-between">
-      <div>
+    <div className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <div className="p-6">
         <div className="flex items-center mb-4">
           <File className="size-8 text-blue-500 mr-3" />
-          <h3 className="text-lg font-semibold text-gray-800 truncate">
+          <h3 className="text-lg font-semibold text-white truncate">
             {filename}
           </h3>
         </div>
-        <p className="text-sm text-gray-500 mb-2">
+        <p className="text-sm text-white mb-2">
           Uploaded on {new Date(createdAt).toLocaleDateString()}
         </p>
-        <p className="text-sm text-gray-500 mb-4">Type: {contentType}</p>
+        <p className="text-sm text-white mb-4">Type: {contentType}</p>
+        <div className="px-4 py-2 bg-white bg-opacity-10 rounded-lg mb-4">
+          <p className="text-sm text-white">Document Type: {documentType}</p>
+          <p className="text-sm text-white">Related to: {relatedPerson}</p>
+          <p className="text-sm text-white">Company: {company}</p>
+        </div>
       </div>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center p-4 bg-white bg-opacity-10">
         <Link
           href={`/report/${id}`}
           className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"

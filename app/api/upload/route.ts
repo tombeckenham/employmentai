@@ -3,7 +3,6 @@ import { put } from '@vercel/blob'
 import { Readable } from 'stream'
 import { auth } from '@/auth'
 import { sql } from '@vercel/postgres'
-import { generateContractReport } from '@/lib/reportGenerator'
 import { triggerBackgroundJob } from '@/lib/backgroundJobs' // New import
 
 // Define a type for our progress callback

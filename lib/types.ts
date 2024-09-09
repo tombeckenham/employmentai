@@ -28,3 +28,42 @@ export interface AuthResult {
   type: string
   message: string
 }
+
+export interface Section {
+  sectionTitle: string
+  evaluation: string
+  reason: string
+  normalPractice: string
+  riskLevel: string
+  recommendation: string
+}
+
+export interface ContractData {
+  documentType:
+    | 'employment contract'
+    | 'offer letter'
+    | 'termination letter'
+    | 'performance review'
+    | 'pay slip'
+    | 'other'
+    | undefined
+  employer: string | undefined
+  employee: string | undefined
+  role: string | undefined
+  salary: number | undefined
+  salaryCurrency: string | undefined
+  jobDescription: string | undefined
+  contractType: string | undefined
+  contractDate: string | undefined
+  startDate: string | undefined
+  vacationDays: string | undefined
+  noticePeriod: string | undefined
+}
+
+export interface ContractReport extends ContractData {
+  highlights: {
+    positive: string[]
+    negative: string[]
+  }
+  sections: Section[]
+}
