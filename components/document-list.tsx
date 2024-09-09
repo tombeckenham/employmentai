@@ -12,14 +12,14 @@ async function DocumentList() {
 
   const classifiedDocuments = documents.reduce(
     (acc: Record<string, Record<string, any[]>>, doc: any) => {
-      const { organization, employee } = doc
-      if (!acc[organization]) {
-        acc[organization] = {}
+      const { employer, employee } = doc
+      if (!acc[employer]) {
+        acc[employer] = {}
       }
-      if (!acc[organization][employee]) {
-        acc[organization][employee] = []
+      if (!acc[employer][employee]) {
+        acc[employer][employee] = []
       }
-      acc[organization][employee].push(doc)
+      acc[employer][employee].push(doc)
       return acc
     },
     {}

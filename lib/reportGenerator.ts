@@ -7,6 +7,8 @@ import { RunnableSequence } from '@langchain/core/runnables'
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
 import { Document } from '@langchain/core/documents'
 import { LangChainTracer } from 'langchain/callbacks'
+import { MemoryVectorStore } from 'langchain/vectorstores/memory'
+import { OpenAIEmbeddings } from '@langchain/openai'
 
 import { z } from 'zod'
 
@@ -121,7 +123,7 @@ const contractSchema = z.object({
     .enum(['Full-time', 'Part-time', 'Contract'])
     .optional()
     .describe('Contract type'),
-  contractDate: z.string().optional().describe('YYYY-MM-DD').optional(),
+  contractDate: z.string().optional().describe('YYYY-MM-DD'),
   startDate: z.string().optional().describe('YYYY-MM-DD'),
   vacationDays: z.string().optional().describe('Number of days'),
   noticePeriod: z.string().optional().describe('Notice period duration')
@@ -225,49 +227,134 @@ function mergePartialReports(
   )
 }
 
+// New function to create and populate the vector store
+async function createVectorStore(docs: Document[]): Promise<MemoryVectorStore> {
+  const vectorStore = await MemoryVectorStore.fromDocuments(
+    docs,
+    new OpenAIEmbeddings()
+  )
+  return vectorStore
+}
+
+async function queryVectorStore(
+  vectorStore: MemoryVectorStore,
+  query: string,
+  llm: ChatOpenAI
+): Promise<string> {
+  const relevantDocs = await vectorStore.similaritySearch(query, 3)
+  const context = relevantDocs.map(doc => doc.pageContent).join('\n\n')
+
+  const response = await llm.invoke(
+    `Based on the following context, ${query}\n\nContext: ${context}`
+  )
+
+  return response.content.toString()
+}
+
 export async function generateContractReport(
   contractUrl: string
 ): Promise<ContractReport> {
   try {
+    /*
     const docs = await getDocumentContent(contractUrl)
     const chunks = await splitDocumentsIntoChunks(docs)
+    const vectorStore = await createVectorStore(chunks)
 
-    // Extract data from chunks
-    const extractedDataResults = await structuredLlm.batch(
-      chunks.map(
-        chunk =>
-          `Analyze this part of the employment document and return only the information you can determine accurately, otherwise omit the field. Don't return any other text or null values: ${chunk.pageContent}`
-      )
+    const llm = new ChatOpenAI({ modelName: 'gpt-4o-mini', temperature: 0 })
+
+    // Extract data using vector store and LLM
+    const extractionQueries = [
+      'What is the document type?',
+      'Who is the employer?',
+      'Who is the employee?',
+      "What is the employee's role or position?",
+      'What is the salary and currency?',
+      'What is the job description?',
+      'What is the contract type?',
+      'What is the contract date?',
+      'What is the start date?',
+      'How many vacation days are provided?',
+      'What is the notice period?'
+    ]
+
+    const extractedInfo = await Promise.all(
+      extractionQueries.map(query => queryVectorStore(vectorStore, query, llm))
     )
-    console.log('Extracted data results:', extractedDataResults)
-    const extractedData = mergePartialData(
-      extractedDataResults as ContractData[]
+
+    console.log('Extracted info:', extractedInfo)
+    const extractedData = await structuredLlm.invoke(
+      `Analyze this employment document information and return only the information you can determine accurately, otherwise omit the field. Don't return any other text or null values: ${extractedInfo.join(' ')}`
     )
 
     console.log('Extracted data:', extractedData)
-    /* // Analyze chunks
-    const partialReports = await analysisChain.batch(
-      chunks.map(chunk => ({
-        contract_data: JSON.stringify(extractedData),
-        full_content: chunk.pageContent,
-        format_instructions: analysisOutputParser.getFormatInstructions()
-      }))
+
+    // Analyze the document
+    const analysisQueries = [
+      'What are the positive aspects of the contract?',
+      'What are the potential concerns or negative aspects of the contract?',
+      'Analyze the compensation section',
+      'Analyze the benefits section',
+      'Analyze the work arrangements section',
+      'Analyze the intellectual property section',
+      'Analyze the non-compete clause',
+      'Analyze the termination and severance section'
+    ]
+
+    const analysisInfo = await Promise.all(
+      analysisQueries.map(query => queryVectorStore(vectorStore, query, llm))
     )
 
-    console.log('Partial reports:', partialReports)
+    const analysisResult = await analysisChain.invoke({
+      contract_data: JSON.stringify(extractedData),
+      full_content: analysisInfo.join('\n\n'),
+      format_instructions: analysisOutputParser.getFormatInstructions()
+    })
 
-    const mergedReport = mergePartialReports(partialReports)
+    console.log('Analysis result:', analysisResult)
+    */
+    // Return dummy data for testing purposes
+    const dummyData: ContractReport = {
+      documentType: 'employment contract',
+      employer: 'Acme Corporation',
+      employee: 'John Doe',
+      role: 'Software Engineer',
+      salary: 80000,
+      salaryCurrency: 'USD',
+      jobDescription: 'Develop and maintain software applications',
+      contractType: 'Full-time',
+      contractDate: '2023-07-01',
+      startDate: '2023-07-15',
+      vacationDays: '20 days per year',
+      noticePeriod: '30 days',
+      highlights: {
+        positive: ['Competitive salary', 'Generous vacation policy'],
+        negative: ['Long working hours', 'Strict non-compete clause']
+      },
+      sections: [
+        {
+          sectionTitle: 'Compensation',
+          evaluation: 'Fair',
+          reason: 'Salary is competitive for the industry and role',
+          normalPractice: 'Similar to other companies in the tech sector',
+          riskLevel: 'Low',
+          recommendation: 'Consider negotiating for performance bonuses'
+        },
+        {
+          sectionTitle: 'Benefits',
+          evaluation: 'Slightly Favors Employer',
+          reason: 'Standard benefits package, but lacks some modern perks',
+          normalPractice:
+            'Many tech companies offer more comprehensive benefits',
+          riskLevel: 'Medium',
+          recommendation:
+            'Inquire about additional benefits like remote work options'
+        }
+      ]
+    }
 
-    console.log('Merged report:', mergedReport)
+    console.log('Returning dummy data:', dummyData)
 
-    return {
-      ...extractedData,
-      ...mergedReport
-    } as ContractReport */
-
-    return {
-      ...extractedData
-    } as ContractReport
+    return dummyData
   } catch (error) {
     console.error('Error generating contract report:', error)
     throw error

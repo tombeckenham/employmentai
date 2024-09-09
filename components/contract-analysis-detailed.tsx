@@ -22,6 +22,14 @@ const ContractAnalysis = ({ report }: { report: ContractReport }) => {
     return <div>Loading...</div>
   }
 
+  const formatDate = (date: string | Date | undefined) => {
+    if (!date) return 'N/A'
+    if (date instanceof Date) {
+      return date.toLocaleDateString()
+    }
+    return date
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 p-4">
       <div className="max-w-4xl mx-auto">
@@ -84,7 +92,9 @@ const ContractAnalysis = ({ report }: { report: ContractReport }) => {
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200 py-2">
                   <span className="font-medium text-gray-600">Start Date</span>
-                  <span className="text-gray-800">{report.startDate}</span>
+                  <span className="text-gray-800">
+                    {formatDate(report.startDate)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200 py-2">
                   <span className="font-medium text-gray-600">
@@ -107,6 +117,9 @@ const ContractAnalysis = ({ report }: { report: ContractReport }) => {
                 <div className="flex justify-between items-center border-b border-gray-200 py-2">
                   <span className="font-medium text-gray-600">
                     Contract Date
+                  </span>
+                  <span className="text-gray-800">
+                    {formatDate(report.contractDate)}
                   </span>
                 </div>
               </div>

@@ -20,11 +20,10 @@ export async function getReportForDocument(
         dr.id, dr.document_type, dr.role, dr.salary, dr.salary_currency, 
         dr.job_description, dr.contract_type, dr.contract_date,
         dr.summary_start_date, dr.summary_vacation_days, dr.summary_notice_period,
-        o.name as organization_name,
-        e.name as employee_name
+        e.name as employee_name, emp.name as employer_name
       FROM document_reports dr
-      JOIN organizations o ON dr.organization_id = o.id
-      JOIN employees e ON dr.employee_id = e.id
+      LEFT JOIN employees e ON dr.employee_id = e.id
+      LEFT JOIN employers emp ON dr.employer_id = emp.id
       WHERE dr.document_id = ${documentId}
     `
 
