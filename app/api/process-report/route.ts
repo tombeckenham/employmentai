@@ -3,6 +3,7 @@ import { verifySignatureAppRouter } from '@upstash/qstash/nextjs'
 import { processJob } from '@/lib/backgroundJobs'
 
 async function handler(req: NextRequest) {
+  console.log('process-report', req)
   const body = await req.json()
   await processJob(body)
   return new Response('OK', { status: 200 })
