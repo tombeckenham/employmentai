@@ -1,37 +1,42 @@
 import { auth } from '@/auth'
 import { sql } from '@vercel/postgres'
 
-export async function getDocuments(includeDeleted: boolean = false) {
+const baseDocumentQuery = `
+  SELECT 
+    d.id, 
+    d.filename, 
+    d.blob_url, 
+    d.content_type, 
+    d.created_at, 
+    d.deleted_at,
+    e.name AS employee, 
+    emp.name AS employer,
+    CASE
+      WHEN dr.id IS NULL THEN 'pending'
+      ELSE 'completed'
+    END AS report_status
+  FROM documents d
+  LEFT JOIN document_reports dr ON d.id = dr.document_id
+  LEFT JOIN employees e ON dr.employee_id = e.id
+  LEFT JOIN employers emp ON dr.employer_id = emp.id
+  WHERE d.user_id = $1
+`
+
+export async function getDocuments() {
   const session = await auth()
 
-  if (!session || !session.user || !session.user.id) {
+  if (!session?.user?.id) {
     throw new Error('User not authenticated')
   }
 
-  const documents = includeDeleted
-    ? await sql`
-    SELECT d.id, d.filename, d.blob_url, d.content_type, d.created_at, d.deleted_at,
-    e.name AS employee, emp.name AS employer
-    FROM documents d
-    LEFT JOIN document_reports dr ON d.id = dr.document_id
-    LEFT JOIN employees e ON dr.employee_id = e.id
-    LEFT JOIN employers emp ON dr.employer_id = emp.id
-    WHERE d.user_id = ${session.user.id} 
-    ORDER BY d.created_at DESC
-    `
-    : await sql`
-    SELECT d.id, d.filename, d.blob_url, d.content_type, d.created_at, d.deleted_at,
-    e.name AS employee, emp.name AS employer
-    FROM documents d
-    LEFT JOIN document_reports dr ON d.id = dr.document_id
-    LEFT JOIN employees e ON dr.employee_id = e.id
-    LEFT JOIN employers emp ON dr.employer_id = emp.id
-    WHERE d.user_id = ${session.user.id} 
+  const { rows: documents } = await sql.query(
+    `${baseDocumentQuery}
     AND d.deleted_at IS NULL
-    ORDER BY d.created_at DESC
-  `
+    ORDER BY d.created_at DESC`,
+    [session.user.id]
+  )
 
-  return documents.rows
+  return documents
 }
 
 export async function getDocumentById(
@@ -40,28 +45,17 @@ export async function getDocumentById(
 ) {
   const session = await auth()
 
-  if (!session || !session.user || !session.user.id) {
+  if (!session?.user?.id) {
     throw new Error('User not authenticated')
   }
 
-  const documents = includeDeleted
-    ? await sql`
-  SELECT id, filename, blob_url, content_type, created_at, deleted_at
-  FROM documents 
-  WHERE user_id = ${session.user.id} 
-  AND id = ${id}
-  ORDER BY created_at DESC
-  `
-    : await sql`
-    SELECT id, filename, blob_url, content_type, created_at, deleted_at
-    FROM documents 
-    WHERE user_id = ${session.user.id} 
-    AND id = ${id}
-    AND deleted_at IS NULL
-    ORDER BY created_at DESC
-  `
-  if (documents.rows.length > 0) {
-    return documents.rows[0]
-  }
-  return undefined
+  const query = `${baseDocumentQuery}
+    AND d.id = $2
+    ${includeDeleted ? '' : 'AND d.deleted_at IS NULL'}
+    ORDER BY d.created_at DESC
+    LIMIT 1`
+
+  const { rows } = await sql.query(query, [session.user.id, id])
+
+  return rows[0] || undefined
 }
