@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server'
-import { createCanvas } from '@napi-rs/canvas'
-import { getDocument } from 'pdfjs-dist/legacy/build/pdf.node.js'
-import path from 'path'
+import { createCanvas, SKRSContext2D } from '@napi-rs/canvas'
 import { getDocumentById } from '@/app/actions/getDocuments'
+
+// @ts-ignore
+import * as pdfjs from 'pdfjs-dist/build/pdf.mjs'
+
+import path from 'path'
 
 // Configure pdfjs worker
 /* GlobalWorkerOptions.workerSrc = path.join(
@@ -39,20 +42,28 @@ export async function GET(
     }
     const arrayBuffer = await response.arrayBuffer()
 
-    // Read the PDF document using pdfjs
-    const loadingTask = getDocument({ data: arrayBuffer })
+    // Make sure the worker is loaded
+    // @ts-ignore
+    await import('pdfjs-dist/build/pdf.worker.min.mjs')
+
+    const loadingTask = pdfjs.getDocument({ data: arrayBuffer })
     const pdf = await loadingTask.promise
     const page = await pdf.getPage(0) // Pages are zero-indexed in pdfjs
     const viewport = page.getViewport({ scale: 1.5 })
     const canvas = createCanvas(viewport.width, viewport.height)
-    const context = canvas.getContext('2d')
+    const context = canvas.getContext('2d') as ExtendedContext2D
 
-    const renderContext = {
-      canvasContext: context,
-      viewport: viewport
+    // Implement the missing method as a no-op
+    if (!context.drawFocusIfNeeded) {
+      context.drawFocusIfNeeded = () => {
+        // No operation needed
+      }
     }
 
-    await page.render(renderContext).promise
+    await page.render({
+      canvasContext: context as unknown as CanvasRenderingContext2D,
+      viewport: viewport
+    }).promise
 
     const pngBuffer = canvas.toBuffer('image/png')
 
@@ -69,4 +80,8 @@ export async function GET(
       { status: 500 }
     )
   }
+}
+
+interface ExtendedContext2D extends SKRSContext2D {
+  drawFocusIfNeeded?: () => void
 }

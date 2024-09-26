@@ -8,10 +8,10 @@ interface DocumentCardProps {
   filename: string
   contentType: string
   createdAt: string
-  // Removed onDelete prop
   documentType: string
   relatedPerson: string
   company: string
+  thumbnailUrl?: string // Add this prop
 }
 
 export default function DocumentCard({
@@ -19,10 +19,10 @@ export default function DocumentCard({
   filename,
   contentType,
   createdAt,
-  // Removed onDelete prop
   documentType,
   relatedPerson,
-  company
+  company,
+  thumbnailUrl // Destructure the new prop
 }: DocumentCardProps) {
   // Removed handleDelete and related state
 
@@ -33,6 +33,18 @@ export default function DocumentCard({
       className="block bg-white bg-opacity-20 backdrop-blur-lg rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
     >
       <div className="p-6">
+        {/* Display thumbnail if available */}
+        {thumbnailUrl ? (
+          <img
+            src={thumbnailUrl}
+            alt="Document Thumbnail"
+            className="w-full h-40 object-cover rounded-md mb-4"
+          />
+        ) : (
+          <div className="w-full h-40 flex items-center justify-center bg-gray-200 rounded-md mb-4">
+            <p className="text-gray-500">No Preview Available</p>
+          </div>
+        )}
         <div className="flex items-center mb-4">
           <File className="size-8 text-blue-500 mr-3" />
           <h3 className="text-lg font-semibold text-white truncate">
@@ -49,15 +61,6 @@ export default function DocumentCard({
           <span className="inline-block px-2 py-1 text-xs font-semibold text-white bg-blue-600 rounded-full">
             {documentType}
           </span>
-        </div>
-
-        {/* Added Preview of the First Page */}
-        <div className="preview-container">
-          <img
-            src={`/api/documents/preview/${id}`}
-            alt="Document Preview"
-            className="w-full h-40 object-cover rounded-md"
-          />
         </div>
       </div>
       {/* 

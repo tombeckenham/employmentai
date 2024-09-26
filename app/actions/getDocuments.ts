@@ -9,6 +9,7 @@ const baseDocumentQuery = `
     d.content_type, 
     d.created_at, 
     d.deleted_at,
+    d.thumbnail_url,
     e.name AS employee, 
     emp.name AS employer,
     CASE

@@ -44,6 +44,7 @@ async function DocumentList() {
                     documentType={doc.documentType}
                     relatedPerson={doc.relatedPerson}
                     company={doc.associatedCompany}
+                    thumbnailUrl={doc.thumbnail_url} // Pass the thumbnail URL
                   />
                 ))}
               </div>

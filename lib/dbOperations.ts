@@ -39,8 +39,6 @@ export async function storeReportInDB(
     RETURNING id
   `
 
-  console.log(report)
-
   const employeeId = employeeResult.rows[0]?.id
   // Insert document report (without highlights)
   const reportResult = await sql`
@@ -98,4 +96,15 @@ export async function storeReportInDB(
     employeeId,
     reportId
   }
+}
+
+export async function updateDocumentThumbnail(
+  documentId: string,
+  thumbnailUrl: string
+) {
+  await sql`
+    UPDATE documents
+    SET thumbnail_url = ${thumbnailUrl}
+    WHERE id = ${documentId}
+  `
 }

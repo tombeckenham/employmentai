@@ -65,6 +65,7 @@
     "react-textarea-autosize": "^8.5.3",
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
+    "sharp": "^0.32.6",
     "sonner": "^1.5.0",
     "usehooks-ts": "^2.16.0",
     "zod": "^3.23.8"
@@ -73,7 +74,6 @@
     "@tailwindcss/typography": "^0.5.14",
     "@types/d3-scale": "^4.0.8",
     "@types/node": "^20.14.14",
-    "@types/pdfjs-dist": "^2.10.378",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/react-syntax-highlighter": "^15.5.13",
@@ -91,5 +91,5 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.5.4"
   },
-  "packageManager": "pnpm@8.6.3"
+  "packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b"
 }
