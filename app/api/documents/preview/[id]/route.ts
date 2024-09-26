@@ -1,7 +1,24 @@
 import { NextResponse } from 'next/server'
-import { createCanvas } from '@napi-rs/canvas'
-import { getDocument } from 'pdfjs-dist'
+import { createCanvas, SKRSContext2D } from '@napi-rs/canvas'
+import { getDocument, PDFPageProxy } from 'pdfjs-dist'
 import { getDocumentById } from '@/app/actions/getDocuments'
+
+// Create a wrapper for SKRSContext2D to satisfy pdfjs-dist requirements
+class CanvasRenderingContext2DAdapter {
+  private ctx: SKRSContext2D;
+
+  constructor(ctx: SKRSContext2D) {
+    this.ctx = ctx;
+  }
+
+  // Implement missing methods as no-ops or with basic functionality
+  drawFocusIfNeeded() {}
+  isPointInPath() { return false; }
+  isPointInStroke() { return false; }
+
+  // Proxy all other method calls to the underlying context
+  [key: string]: any;
+}
 
 export async function GET(
   request: Request,
@@ -39,13 +56,23 @@ export async function GET(
     const canvas = createCanvas(viewport.width, viewport.height)
     const context = canvas.getContext('2d')
 
+    // Create an adapter for the context
+    const contextAdapter = new Proxy(new CanvasRenderingContext2DAdapter(context), {
+      get(target, prop) {
+        if (prop in target) {
+          return (target as any)[prop];
+        }
+        return (context as any)[prop];
+      }
+    });
+
     // Render the PDF page on the canvas
     const renderContext = {
-      canvasContext: context,
+      canvasContext: contextAdapter,
       viewport: viewport
     }
 
-    await page.render(renderContext).promise
+    await page.render(renderContext as any).promise
 
     // Convert the canvas to a PNG buffer
     const pngBuffer = canvas.toBuffer('image/png')
