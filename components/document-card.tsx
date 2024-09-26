@@ -1,6 +1,8 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
+
 import { File, ArrowRight } from 'lucide-react'
 
 interface DocumentCardProps {
@@ -30,15 +32,16 @@ export default function DocumentCard({
     // Made the entire card clickable by wrapping with Link
     <Link
       href={`/report/${id}`}
-      className="block bg-white bg-opacity-20 backdrop-blur-lg rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+      className="block bg-white/20 backdrop-blur-lg rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
     >
       <div className="p-6">
         {/* Display thumbnail if available */}
         {thumbnailUrl ? (
-          <img
+          <Image
             src={thumbnailUrl}
             alt="Document Thumbnail"
-            className="w-full h-40 object-cover rounded-md mb-4"
+            width={500}
+            height={300}
           />
         ) : (
           <div className="w-full h-40 flex items-center justify-center bg-gray-200 rounded-md mb-4">
@@ -57,7 +60,7 @@ export default function DocumentCard({
         <p className="text-sm text-white mb-4">Type: {contentType}</p>
 
         {/* Added Document Type Label */}
-        <div className="px-4 py-2 bg-white bg-opacity-10 rounded-lg mb-4">
+        <div className="px-4 py-2 bg-white/10 rounded-lg mb-4">
           <span className="inline-block px-2 py-1 text-xs font-semibold text-white bg-blue-600 rounded-full">
             {documentType}
           </span>
