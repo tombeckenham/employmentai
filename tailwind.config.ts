@@ -46,14 +46,28 @@ const config: Config = {
         },
 
         indigo: {
-          600: '#4f46e5'
+          300: '#A5B4FC',
+          600: '#4f46e5',
+          700: '#4338CA' // Newly added for deeper shade
         },
         purple: {
+          400: '#C084FC',
+
           600: '#7c3aed'
         },
         yellow: {
+          300: '#fde047',
           400: '#facc15',
-          300: '#fde047'
+          600: '#D97706'
+        },
+        gray: {
+          200: '#E5E7EB',
+          300: '#D1D5DB',
+          400: '#9CA3AF'
+        },
+        green: {
+          400: '#34D399',
+          600: '#059669'
         },
 
         border: 'hsl(var(--border))',

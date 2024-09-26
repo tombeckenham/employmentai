@@ -20,6 +20,7 @@
     "@langchain/openai": "^0.2.6",
     "@langchain/pinecone": "^0.0.8",
     "@mui/base": "5.0.0-beta.40",
+    "@napi-rs/canvas": "^0.1.56",
     "@pinecone-database/pinecone": "^3.0.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.1",
@@ -54,7 +55,7 @@
     "next-themes": "^0.2.1",
     "openai": "^4.55.3",
     "pdf-parse": "^1.1.1",
-    "pdfjs-dist": "^4.5.136",
+    "pdfjs-dist": "4.0.379",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-dropzone": "^14.2.3",
@@ -64,7 +65,9 @@
     "react-textarea-autosize": "^8.5.3",
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
+    "sharp": "^0.32.6",
     "sonner": "^1.5.0",
+    "swr": "^2.2.5",
     "usehooks-ts": "^2.16.0",
     "zod": "^3.23.8"
   },
@@ -89,5 +92,5 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.5.4"
   },
-  "packageManager": "pnpm@8.6.3"
+  "packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b"
 }

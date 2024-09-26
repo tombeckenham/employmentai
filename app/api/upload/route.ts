@@ -67,6 +67,11 @@ export async function POST(request: NextRequest) {
       documentId
     })
 
+    // Trigger background job for thumbnail creation
+    await triggerBackgroundJob('createThumbnail', {
+      documentId
+    })
+
     return NextResponse.json({
       message: 'File uploaded successfully',
       documentId: result.rows[0].id

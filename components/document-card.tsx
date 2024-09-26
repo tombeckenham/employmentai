@@ -1,18 +1,31 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
-import { File, ArrowRight, Trash2 } from 'lucide-react'
+import Image from 'next/image'
+import { ChevronRight } from 'lucide-react'
+import { Badge } from '@/components/ui/badge' // Retained import for Badge
+import {
+  employmentDocumentTypeColorMap,
+  employmentDocumentTypes
+} from '@/lib/employmentDocumentTypes'
+import { cn } from '@/lib/utils'
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
+import { useState } from 'react'
 
 interface DocumentCardProps {
   id: string
   filename: string
   contentType: string
   createdAt: string
-  onDelete: (id: string) => Promise<void>
   documentType: string
   relatedPerson: string
   company: string
+  thumbnailUrl?: string // Ensure this prop is handled
 }
 
 export default function DocumentCard({
@@ -20,61 +33,77 @@ export default function DocumentCard({
   filename,
   contentType,
   createdAt,
-  onDelete,
   documentType,
   relatedPerson,
-  company
+  company,
+  thumbnailUrl
 }: DocumentCardProps) {
-  const [isDeleting, setIsDeleting] = useState(false)
+  const isPending = !company || !relatedPerson
+  const [showFullName, setShowFullName] = useState(false)
 
-  const handleDelete = async () => {
-    setIsDeleting(true)
-    try {
-      await onDelete(id)
-      // TODO: change to a client component update
-      window.location.reload()
-    } catch (error) {
-      console.error('Failed to delete document:', error)
-      // You might want to show an error message to the user here
-    } finally {
-      setIsDeleting(false)
-    }
+  const toggleFullName = () => {
+    setShowFullName(!showFullName)
   }
 
   return (
-    <div className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <div className="p-6">
-        <div className="flex items-center mb-4">
-          <File className="size-8 text-blue-500 mr-3" />
-          <h3 className="text-lg font-semibold text-white truncate">
-            {filename}
-          </h3>
-        </div>
-        <p className="text-sm text-white mb-2">
-          Uploaded on {new Date(createdAt).toLocaleDateString()}
+    <Link href={`/report/${id}`} className="block">
+      <div className="border p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+        {thumbnailUrl ? (
+          <Image
+            src={thumbnailUrl}
+            alt={`${filename} thumbnail`}
+            width={100}
+            height={100}
+            className="mb-2 rounded border size-24 object-cover" // Consistent height and width, object-cover
+          />
+        ) : (
+          <div className="mb-2 size-24 flex items-center justify-center bg-gray-200 rounded border">
+            <span className="text-gray-500 text-sm">No Preview</span>{' '}
+            {/* Placeholder for missing preview */}
+          </div>
+        )}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <h3
+              className="text-lg font-bold truncate cursor-pointer"
+              onClick={toggleFullName}
+            >
+              {filename}
+            </h3>
+          </TooltipTrigger>
+          <TooltipContent>
+            <span>{filename}</span>
+          </TooltipContent>
+        </Tooltip>
+        {showFullName && <p className="text-sm text-gray-700">{filename}</p>}
+        <p className="text-sm text-gray-500">{contentType}</p>
+        <p className="text-sm text-gray-500">
+          Uploaded:{' '}
+          {new Date(createdAt).toLocaleString(undefined, {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}{' '}
         </p>
-        <p className="text-sm text-white mb-4">Type: {contentType}</p>
-        <div className="px-4 py-2 bg-white bg-opacity-10 rounded-lg mb-4">
-          <p className="text-sm text-white">Document Type: {documentType}</p>
-          <p className="text-sm text-white">Related to: {relatedPerson}</p>
-          <p className="text-sm text-white">Company: {company}</p>
+
+        {isPending ? (
+          <Badge color="yellow" variant="default" className="mt-2">
+            Pending
+          </Badge>
+        ) : (
+          <Badge
+            color={employmentDocumentTypeColorMap[documentType]}
+            variant="outline"
+          >
+            {documentType}
+          </Badge>
+        )}
+        <div className="mt-2 text-right text-blue-500">
+          <ChevronRight className="inline-block size-4" />
         </div>
       </div>
-      <div className="flex justify-between items-center p-4 bg-white bg-opacity-10">
-        <Link
-          href={`/report/${id}`}
-          className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-        >
-          View Report <ArrowRight className="ml-2 size-4" />
-        </Link>
-        <button
-          onClick={handleDelete}
-          disabled={isDeleting}
-          className="inline-flex items-center justify-center p-2 border border-transparent text-sm font-medium rounded-md text-red-600 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
-        >
-          <Trash2 className="size-5" />
-        </button>
-      </div>
-    </div>
+    </Link>
   )
 }

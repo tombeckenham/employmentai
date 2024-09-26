@@ -9,6 +9,11 @@ import { Document } from '@langchain/core/documents'
 import { LangChainTracer } from 'langchain/callbacks'
 import { MemoryVectorStore } from 'langchain/vectorstores/memory'
 import { OpenAIEmbeddings } from '@langchain/openai'
+import {
+  employmentDocumentTypes,
+  employmentDocumentTypesSchema
+} from './employmentDocumentTypes'
+import { z } from 'zod'
 
 const exampleReport = {
   documentType: 'employment contract',
@@ -41,17 +46,6 @@ const exampleReport = {
     // ... repeat for other sections ...
   ]
 }
-
-import { z } from 'zod'
-
-const employmentDocumentTypes = [
-  'employment contract',
-  'offer letter',
-  'termination letter',
-  'performance review',
-  'pay slip',
-  'other'
-]
 
 const prompt = `
   You are an expert in employment documents. Analyze the document and firstly determine the type of document it is. It should be one of the following types: ${employmentDocumentTypes.join(', ')}.
@@ -106,11 +100,9 @@ const prompt = `
     jobDescription: 'Brief job description',
     contractType: 'Full-time',
     contractDate: '2023-05-15',
-    summary: {
-      startDate: 'YYYY-MM-DD',
-      vacationDays: 'Number of days',
-      noticePeriod: 'Notice period duration'
-    },
+    startDate: 'YYYY-MM-DD',
+    vacationDays: 'Number of days',
+    noticePeriod: 'Notice period duration',
     highlights: {
       positive: ['Positive aspect 1', 'Positive aspect 2'],
       negative: ['Concern 1', 'Concern 2']
@@ -138,15 +130,7 @@ const prompt = `
 `
 
 const contractSchema = z.object({
-  documentType: z
-    .enum([
-      'employment contract',
-      'offer letter',
-      'termination letter',
-      'performance review',
-      'pay slip',
-      'other'
-    ])
+  documentType: employmentDocumentTypesSchema
     .optional()
     .describe('Type of employment document'),
   employer: z.string().optional().describe('Company Name (the hiring entity)'),

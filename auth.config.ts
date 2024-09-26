@@ -8,7 +8,6 @@ export const authConfig = {
   },
   callbacks: {
     async authorized({ auth, request: { nextUrl } }) {
-      console.log('auth', auth, 'nextUrl', nextUrl)
       const isLoggedIn = !!auth?.user
 
       const isOnSignIn = nextUrl.pathname.startsWith('/login')
@@ -24,7 +23,6 @@ export const authConfig = {
 
       if (isOnSignIn || isOnSignUp || isOnHome) {
         if (isLoggedIn) {
-          console.log('User is already logged in')
           return Response.redirect(new URL('/documents', nextUrl))
         }
         return true

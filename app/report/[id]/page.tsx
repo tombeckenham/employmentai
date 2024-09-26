@@ -15,7 +15,6 @@ export default async function ReportPage({
 
   const report = await getReportForDocument(document.id)
 
-  console.log('report', report)
   if (!report) {
     return <div>Report generation in progress...</div>
   }
