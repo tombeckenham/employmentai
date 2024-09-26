@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createCanvas } from '@napi-rs/canvas'
-import { getDocument } from 'pdfjs-dist/legacy/build/pdf.node.js'
+import { getDocument } from 'pdfjs-dist'
 import { getDocumentById } from '@/app/actions/getDocuments'
 
 export async function GET(
