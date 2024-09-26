@@ -63,6 +63,20 @@ pnpm dev
 
 Your app template should now be running on [localhost:3000](http://localhost:3000/).
 
+## Run ngrok
+
+```bash
+ngrok http 3000
+```
+
+This will give you a public URL that you can use to test your webhook. Add the domain of your webhook url to your developer environment variables.
+
+e.g.
+
+```
+WEBHOOK_URL="9725-60-242-118-130.ngrok-free.app"
+```
+
 ## Authors
 
 This library is created by [Vercel](https://vercel.com) and [Next.js](https://nextjs.org) team members, with contributions from:
