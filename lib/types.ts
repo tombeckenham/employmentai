@@ -67,3 +67,14 @@ export interface ContractReport extends ContractData {
   }
   sections: Section[]
 }
+
+export interface Document {
+  id: string
+  filename: string
+  content_type: string
+  created_at: string
+  document_type: string
+  employee: string
+  employer: string
+  thumbnail_url?: string
+}

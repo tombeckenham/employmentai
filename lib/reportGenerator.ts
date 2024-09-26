@@ -100,11 +100,9 @@ const prompt = `
     jobDescription: 'Brief job description',
     contractType: 'Full-time',
     contractDate: '2023-05-15',
-    summary: {
-      startDate: 'YYYY-MM-DD',
-      vacationDays: 'Number of days',
-      noticePeriod: 'Notice period duration'
-    },
+    startDate: 'YYYY-MM-DD',
+    vacationDays: 'Number of days',
+    noticePeriod: 'Notice period duration',
     highlights: {
       positive: ['Positive aspect 1', 'Positive aspect 2'],
       negative: ['Concern 1', 'Concern 2']

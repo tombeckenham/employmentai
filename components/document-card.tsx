@@ -10,6 +10,13 @@ import {
 } from '@/lib/employmentDocumentTypes'
 import { cn } from '@/lib/utils'
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
+import { useState } from 'react'
+
 interface DocumentCardProps {
   id: string
   filename: string
@@ -18,7 +25,7 @@ interface DocumentCardProps {
   documentType: string
   relatedPerson: string
   company: string
-  thumbnailUrl?: string // Add this prop
+  thumbnailUrl?: string // Ensure this prop is handled
 }
 
 export default function DocumentCard({
@@ -31,67 +38,70 @@ export default function DocumentCard({
   company,
   thumbnailUrl
 }: DocumentCardProps) {
-  const badgeColor = employmentDocumentTypeColorMap[documentType] || 'gray'
+  const isPending = !company || !relatedPerson
+  const [showFullName, setShowFullName] = useState(false)
+
+  const toggleFullName = () => {
+    setShowFullName(!showFullName)
+  }
 
   return (
-    <Link
-      href={`/report/${id}`}
-      className="block bg-white/20 backdrop-blur-lg rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 hover:scale-105"
-    >
-      <div className="p-6 flex flex-col h-full">
-        {/* Thumbnail Section */}
+    <Link href={`/report/${id}`} className="block">
+      <div className="border p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
         {thumbnailUrl ? (
-          <div className="w-full h-48 relative mb-4">
-            <Image
-              src={thumbnailUrl}
-              alt="Document Thumbnail"
-              fill
-              className="object-contain rounded-md" // Removed any border classes
-            />
-          </div>
+          <Image
+            src={thumbnailUrl}
+            alt={`${filename} thumbnail`}
+            width={100}
+            height={100}
+            className="mb-2 rounded border size-24 object-cover" // Consistent height and width, object-cover
+          />
         ) : (
-          <div className="w-full h-48 flex items-center justify-center bg-gray-200 rounded-md mb-4">
-            <p className="text-gray-500">No Preview Available</p>
+          <div className="mb-2 size-24 flex items-center justify-center bg-gray-200 rounded border">
+            <span className="text-gray-500 text-sm">No Preview</span>{' '}
+            {/* Placeholder for missing preview */}
           </div>
         )}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <h3
+              className="text-lg font-bold truncate cursor-pointer"
+              onClick={toggleFullName}
+            >
+              {filename}
+            </h3>
+          </TooltipTrigger>
+          <TooltipContent>
+            <span>{filename}</span>
+          </TooltipContent>
+        </Tooltip>
+        {showFullName && <p className="text-sm text-gray-700">{filename}</p>}
+        <p className="text-sm text-gray-500">{contentType}</p>
+        <p className="text-sm text-gray-500">
+          Uploaded:{' '}
+          {new Date(createdAt).toLocaleString(undefined, {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}{' '}
+        </p>
 
-        <div className="flex-1">
-          {/* Removed the <File> icon */}
-          <h3 className="text-lg font-semibold text-white truncate">
-            {filename}
-          </h3>
-          <p className="text-sm text-white mb-1">
-            Uploaded on {new Date(createdAt).toLocaleDateString()}
-          </p>
-          <p className="text-sm text-white mb-3">Type: {contentType}</p>
-
-          {/* Replaced Document Type Label with shadcn Badge and dynamic colors */}
+        {isPending ? (
+          <Badge color="yellow" variant="default" className="mt-2">
+            Pending
+          </Badge>
+        ) : (
           <Badge
-            className={cn('rounded-full mb-4 px-2 py-1 text-xs font-medium', {
-              'bg-indigo-600/20 text-indigo-400': badgeColor === 'indigo',
-              'bg-green-600/20 text-green-400': badgeColor === 'green',
-              'bg-yellow-600/20 text-yellow-400': badgeColor === 'yellow',
-              'bg-purple-600/20 text-purple-400': badgeColor === 'purple',
-              'bg-gray-600/20 text-gray-400': badgeColor === 'gray'
-              // Add more mappings as needed
-            })}
+            color={employmentDocumentTypeColorMap[documentType]}
+            variant="outline"
           >
             {documentType}
           </Badge>
-        </div>
-
-        {/* Action Section */}
-        <div className="flex items-center justify-between mt-auto">
-          <div className="flex items-center space-x-2">
-            <ChevronRight className="size-5 text-indigo-500" />
-            <span className="text-indigo-500 text-sm">View Details</span>
-          </div>
-          {/* Optional: Add a delete button if needed */}
-          {/*
-          <button className="text-red-400 hover:text-red-500">
-            <Trash2 className="size-5" />
-          </button>
-          */}
+        )}
+        <div className="mt-2 text-right text-blue-500">
+          <ChevronRight className="inline-block size-4" />
         </div>
       </div>
     </Link>

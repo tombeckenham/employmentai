@@ -1,7 +1,6 @@
 import React from 'react'
-import { cva, type VariantProps } from 'class-variance-authority'
-
 import { cn } from '@/lib/utils'
+import { cva, type VariantProps } from 'class-variance-authority'
 
 const badgeVariants = cva(
   'inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
@@ -22,15 +21,32 @@ const badgeVariants = cva(
     }
   }
 )
+// Define the color mapping
+const badgeColors = {
+  indigo: 'bg-indigo-100 text-indigo-800',
+  green: 'bg-green-100 text-green-800',
+  yellow: 'bg-yellow-100 text-yellow-800',
+  purple: 'bg-purple-100 text-purple-800',
+  blue: 'bg-blue-100 text-blue-800',
+  gray: 'bg-gray-100 text-gray-800'
+  // Add more colors as needed
+}
 
-export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
+// Update the BadgeProps interface to include variant
+interface BadgeProps
+  extends React.HTMLAttributes<HTMLSpanElement>,
+    VariantProps<typeof badgeVariants> {
+  color?: keyof typeof badgeColors
+}
 
-function Badge({ className, variant, ...props }: BadgeProps) {
+// {{ Updated Badge component to apply colors and variants based on props }}
+function Badge({ className, variant, color = 'gray', ...props }: BadgeProps) {
   return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+    <span
+      className={cn(badgeVariants({ variant }), badgeColors[color], className)}
+      {...props}
+    />
   )
 }
 
-export { Badge, badgeVariants }
+export { Badge }
