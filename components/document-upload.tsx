@@ -27,10 +27,6 @@ export default function DocumentUpload() {
       }
 
       const data = await response.json()
-      alert('File uploaded successfully!')
-
-      // TODO: add client side component to refresh the list
-      window.location.reload()
     } catch (error) {
       console.error('Error uploading file:', error)
       alert('Error uploading file. Please try again.')
