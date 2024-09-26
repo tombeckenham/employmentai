@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createCanvas, SKRSContext2D } from '@napi-rs/canvas'
-import { getDocument, PDFPageProxy } from 'pdfjs-dist'
+import { getDocument, PDFDocumentProxy } from 'pdfjs-dist'
 import { getDocumentById } from '@/app/actions/getDocuments'
 
 // Create a wrapper for SKRSContext2D to satisfy pdfjs-dist requirements
@@ -18,6 +18,17 @@ class CanvasRenderingContext2DAdapter {
 
   // Proxy all other method calls to the underlying context
   [key: string]: any;
+}
+
+// Custom promise creation function to replace Promise.withResolvers()
+function createResolvablePromise<T>() {
+  let resolve!: (value: T | PromiseLike<T>) => void;
+  let reject!: (reason?: any) => void;
+  const promise = new Promise<T>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+  return { promise, resolve, reject };
 }
 
 export async function GET(
@@ -72,7 +83,9 @@ export async function GET(
       viewport: viewport
     }
 
-    await page.render(renderContext as any).promise
+    const { promise, resolve, reject } = createResolvablePromise<void>();
+    page.render(renderContext as any).then(resolve, reject);
+    await promise;
 
     // Convert the canvas to a PNG buffer
     const pngBuffer = canvas.toBuffer('image/png')
