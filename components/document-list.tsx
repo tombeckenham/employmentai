@@ -41,9 +41,9 @@ async function DocumentList() {
                     contentType={doc.content_type}
                     createdAt={doc.created_at}
                     // Removed the onDelete prop
-                    documentType={doc.documentType}
-                    relatedPerson={doc.relatedPerson}
-                    company={doc.associatedCompany}
+                    documentType={doc.document_type}
+                    relatedPerson={doc.employee}
+                    company={doc.employer}
                     thumbnailUrl={doc.thumbnail_url} // Pass the thumbnail URL
                   />
                 ))}

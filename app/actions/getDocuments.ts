@@ -12,6 +12,7 @@ const baseDocumentQuery = `
     d.thumbnail_url,
     e.name AS employee, 
     emp.name AS employer,
+    dr.document_type AS document_type,
     CASE
       WHEN dr.id IS NULL THEN 'pending'
       ELSE 'completed'
