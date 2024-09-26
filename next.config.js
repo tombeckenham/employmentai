@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+
 module.exports = {
   images: {
     remotePatterns: [
@@ -9,5 +10,18 @@ module.exports = {
         pathname: '**'
       }
     ]
+  },
+  webpack: (config, { isServer }) => {
+    config.module.rules.push({
+      test: /pdf\.mjs$/,
+      include: /node_modules/,
+      type: 'javascript/auto'
+    })
+    if (isServer) {
+      config.externals.push({
+        '@napi-rs/canvas': 'commonjs @napi-rs/canvas'
+      })
+    }
+    return config
   }
 }

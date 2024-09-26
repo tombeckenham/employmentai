@@ -3,10 +3,7 @@ import { getDocuments } from '../app/actions/getDocuments'
 import { softDeleteDocument } from '../app/actions/softDeleteDocument'
 
 async function DocumentList() {
-  async function handleDelete(id: string) {
-    'use server'
-    await softDeleteDocument(id)
-  }
+  // Removed handleDelete since deletion is moved to the report page
 
   const documents = await getDocuments()
 
@@ -43,8 +40,8 @@ async function DocumentList() {
                     filename={doc.filename}
                     contentType={doc.content_type}
                     createdAt={doc.created_at}
-                    onDelete={handleDelete}
-                    documentType={doc.documentType} // Add document type as a label
+                    // Removed the onDelete prop
+                    documentType={doc.documentType}
                     relatedPerson={doc.relatedPerson}
                     company={doc.associatedCompany}
                   />
