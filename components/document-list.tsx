@@ -4,11 +4,12 @@ import DocumentCard from '@/components/document-card'
 import useSWR from 'swr'
 import { fetcher } from '@/lib/fetcher'
 import type { Document } from '@/lib/types'
+import { getDocuments } from '@/app/actions/getDocuments'
 
 function DocumentList() {
   const { data: documents = [], error } = useSWR<Document[]>(
     '/api/documents',
-    fetcher,
+    getDocuments,
     {
       refreshInterval: 5000,
       revalidateOnFocus: true

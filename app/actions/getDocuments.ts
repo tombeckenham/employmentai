@@ -1,3 +1,4 @@
+'use server'
 import { auth } from '@/auth'
 import { sql } from '@vercel/postgres'
 
