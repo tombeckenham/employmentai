@@ -29,8 +29,10 @@ export async function storeReportInDB(
     ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name
     RETURNING id
   `
-  const employerId = employerResult.rows[0]?.id
 
+  console.log('employerResult', employerResult)
+  const employerId = employerResult.rows[0]?.id
+  console.log('employerId', employerId)
   // Insert employee
   const employeeResult = await sql`
     INSERT INTO employees (name)
@@ -38,8 +40,9 @@ export async function storeReportInDB(
     ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name
     RETURNING id
   `
-
+  console.log('employeeResult', employeeResult)
   const employeeId = employeeResult.rows[0]?.id
+  console.log('employeeId', employeeId)
   // Insert document report (without highlights)
   const reportResult = await sql`
     INSERT INTO document_reports (
@@ -54,9 +57,9 @@ export async function storeReportInDB(
     )
     RETURNING id
   `
-
+  console.log('reportResult', reportResult)
   const reportId = reportResult.rows[0]?.id
-
+  console.log('reportId', reportId)
   // Insert highlights
   const insertHighlight = async (
     type: 'positive' | 'negative',
@@ -66,6 +69,7 @@ export async function storeReportInDB(
       INSERT INTO highlights (report_id, type, content)
       VALUES (${reportId}, ${type}, ${content})
     `
+    console.log('highlightResult', reportId, type, content)
   }
 
   for (const highlight of highlights.positive) {
@@ -78,7 +82,7 @@ export async function storeReportInDB(
 
   // Insert sections
   for (const section of sections) {
-    await sql`
+    const sectionResult = await sql`
       INSERT INTO sections (
         report_id, section_title, evaluation, reason, normal_practice,
         risk_level, recommendation
@@ -89,7 +93,10 @@ export async function storeReportInDB(
         ${section.recommendation}
       )
     `
+    console.log('sectionResult', sectionResult)
   }
+
+  console.log('report stored in DB')
 
   return {
     employerId,
