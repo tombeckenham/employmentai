@@ -5,9 +5,27 @@ const qstash = new Client({
 })
 
 export async function triggerBackgroundJob(jobType: string, data: any) {
-  const webhookUrl = `https://${process.env.WEBHOOK_URL || process.env.VERCEL_PROJECT_PRODUCTION_URL}/api/process-job`
+  let apiRoute = '404'
 
-  const response = await qstash.publishJSON({
+  switch (jobType) {
+    case 'createThumbnail':
+      apiRoute = 'create-thumbnail'
+      break
+    case 'generateReport':
+      apiRoute = 'generate-report'
+      break
+    default:
+      throw new Error('Invalid job type')
+  }
+  const domain =
+    process.env.WEBHOOK_URL ||
+    (process.env.NODE_ENV === 'production'
+      ? process.env.VERCEL_PROJECT_PRODUCTION_URL
+      : process.env.VERCEL_URL)
+
+  const webhookUrl = `https://${domain}/api/${apiRoute}`
+
+  await qstash.publishJSON({
     url: webhookUrl,
     body: { jobType, ...data }
   })

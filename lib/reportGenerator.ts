@@ -14,6 +14,7 @@ import {
   employmentDocumentTypesSchema
 } from './employmentDocumentTypes'
 import { z } from 'zod'
+import { getDocUrl, storeReportInDB } from './dbOperations'
 
 const exampleReport = {
   documentType: 'employment contract',
@@ -271,10 +272,12 @@ async function queryVectorStore(
   return response.content.toString()
 }
 
-export async function generateContractReport(
-  contractUrl: string
+export async function processGenerateContractReport(
+  documentId: string
 ): Promise<ContractReport> {
   try {
+    const contractUrl = await getDocUrl(documentId)
+
     const docs = await getDocumentContent(contractUrl)
     const fullContent = docs.map(doc => doc.pageContent).join('\n')
 
@@ -291,6 +294,8 @@ export async function generateContractReport(
     const result = await chain.invoke({
       context: fullContent
     })
+    await storeReportInDB(documentId, result)
+
     return result
   } catch (error) {
     console.error('Error generating contract report:', error)

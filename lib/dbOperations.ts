@@ -108,3 +108,15 @@ export async function updateDocumentThumbnail(
     WHERE id = ${documentId}
   `
 }
+
+export async function getDocUrl(documentId: string) {
+  const { rows } = await sql`
+    SELECT blob_url FROM documents WHERE id = ${documentId}
+  `
+  const blobUrl = rows[0]?.blob_url
+
+  if (!blobUrl) {
+    throw new Error(`No blob URL found for document ID: ${documentId}`)
+  }
+  return blobUrl
+}
