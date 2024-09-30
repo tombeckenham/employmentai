@@ -70,8 +70,8 @@ export async function storeReportInDB(
     )
     VALUES (
       ${documentId}, ${documentType}, ${employerId}, ${employeeId},
-      ${role}, ${salary || 0}, ${salaryCurrency || 'EUR'}, ${jobDescription || ''}, ${contractType || ''}, ${contractDate || ''},
-      ${startDate || ''}, ${vacationDays || 0}, ${noticePeriod || 0}
+      ${role || null}, ${salary || null}, ${salaryCurrency || null}, ${jobDescription || null}, ${contractType || null}, ${contractDate || null},
+      ${startDate || null}, ${vacationDays || null}, ${noticePeriod || null}
     )
     RETURNING id
   `
