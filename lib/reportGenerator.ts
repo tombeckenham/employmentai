@@ -294,7 +294,11 @@ export async function processGenerateContractReport(
     const result = await chain.invoke({
       context: fullContent
     })
-    await storeReportInDB(documentId, result)
+    await storeReportInDB(documentId, {
+      ...result,
+      contractText: fullContent,
+      analysisPrompt: prompt
+    })
 
     return result
   } catch (error) {

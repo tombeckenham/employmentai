@@ -20,6 +20,7 @@ export async function getReportForDocument(
         dr.id, dr.document_type, dr.role, dr.salary, dr.salary_currency, 
         dr.job_description, dr.contract_type, dr.contract_date,
         dr.summary_start_date, dr.summary_vacation_days, dr.summary_notice_period,
+        dr.contract_text, dr.analysis_prompt,
         e.name as employee_name, emp.name as employer_name
       FROM document_reports dr
       LEFT JOIN employees e ON dr.employee_id = e.id
@@ -81,7 +82,9 @@ export async function getReportForDocument(
     vacationDays: reportData.summary_vacation_days,
     noticePeriod: reportData.summary_notice_period,
     highlights: highlights,
-    sections: sections
+    sections: sections,
+    contractText: reportData.contract_text,
+    analysisPrompt: reportData.analysis_prompt
   }
 
   return report

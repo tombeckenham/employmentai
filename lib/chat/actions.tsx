@@ -121,10 +121,34 @@ async function confirmPurchase(symbol: string, price: number, amount: number) {
   }
 }
 
-async function submitUserMessage(content: string) {
+async function submitUserMessage(
+  content: string,
+  context: { contract?: string; analysisPrompt?: string }
+) {
   'use server'
 
   const aiState = getMutableAIState<typeof AI>()
+
+  const { contract, analysisPrompt } = context
+
+  // Include 'contract' and 'analysisPrompt' in the AI prompt or messages
+  const messages = [
+    {
+      role: 'system',
+      content: `You are an expert contract analyst. Use the following contract and analysis prompt as context.
+
+Contract Text:
+${contract}
+
+Analysis Prompt:
+${analysisPrompt}
+`
+    },
+    {
+      role: 'user',
+      content
+    }
+  ]
 
   aiState.update({
     ...aiState.get(),

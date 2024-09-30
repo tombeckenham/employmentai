@@ -26,7 +26,9 @@ export async function storeReportInDB(
     vacationDays,
     noticePeriod,
     highlights,
-    sections
+    sections,
+    contractText,
+    analysisPrompt
   } = report
   console.log('report', report)
 
@@ -69,35 +71,22 @@ export async function storeReportInDB(
     noticePeriod
   )
 
-  // Insert document report (without highlights)
-
-  console.log(
-    'about to insert report sql',
-    `
-    INSERT INTO document_reports (
-      document_id, document_type, employer_id, employee_id,
-      role, salary, salary_currency, job_description, contract_type, contract_date,
-      summary_start_date, summary_vacation_days, summary_notice_period
-    )
-    VALUES (
-      ${documentId}, ${documentType}, ${employerId}, ${employeeId},
-      ${chkUnk(role)}, ${chkUnk(salary)}, ${chkUnk(salaryCurrency)}, ${chkUnk(jobDescription)}, ${chkUnk(contractType)}, ${chkUnk(contractDate)},
-      ${chkUnk(startDate)}, ${chkUnk(vacationDays)}, ${chkUnk(noticePeriod)}
-    )
-    RETURNING id
-  `
-  )
+  // Insert document report (with contractText and analysisPrompt)
   const reportResult = await sql`
     INSERT INTO document_reports (
       document_id, document_type, employer_id, employee_id,
       role, salary, salary_currency, job_description, contract_type, contract_date,
-      summary_start_date, summary_vacation_days, summary_notice_period
+      summary_start_date, summary_vacation_days, summary_notice_period,
+      contract_text, analysis_prompt
     )
     VALUES (
       ${documentId}, ${documentType}, ${employerId}, ${employeeId},
-      ${chkUnk(role)}, ${chkUnk(salary)}, ${chkUnk(salaryCurrency)}, ${chkUnk(jobDescription)}, ${chkUnk(contractType)}, ${chkUnk(contractDate)},
-      ${chkUnk(startDate)}, ${chkUnk(vacationDays)}, ${chkUnk(noticePeriod)}
-   )
+      ${chkUnk(role)}, ${chkUnk(salary)}, ${chkUnk(salaryCurrency)}, ${chkUnk(
+        jobDescription
+      )}, ${chkUnk(contractType)}, ${chkUnk(contractDate)},
+      ${chkUnk(startDate)}, ${chkUnk(vacationDays)}, ${chkUnk(noticePeriod)},
+      ${contractText}, ${analysisPrompt}
+    )
     RETURNING id
   `
   console.log('reportResult', reportResult)
