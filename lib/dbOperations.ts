@@ -62,6 +62,23 @@ export async function storeReportInDB(
   )
 
   // Insert document report (without highlights)
+
+  console.log(
+    'about to insert report sql',
+    `
+    INSERT INTO document_reports (
+      document_id, document_type, employer_id, employee_id,
+      role, salary, salary_currency, job_description, contract_type, contract_date,
+      summary_start_date, summary_vacation_days, summary_notice_period
+    )
+    VALUES (
+      ${documentId}, ${documentType}, ${employerId}, ${employeeId},
+      ${role || null}, ${salary || null}, ${salaryCurrency || null}, ${jobDescription || null}, ${contractType || null}, ${contractDate || null},
+      ${startDate || null}, ${vacationDays || null}, ${noticePeriod || null}
+    )
+    RETURNING id
+  `
+  )
   const reportResult = await sql`
     INSERT INTO document_reports (
       document_id, document_type, employer_id, employee_id,
