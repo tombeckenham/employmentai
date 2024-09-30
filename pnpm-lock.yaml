@@ -12,17 +12,17 @@ importers:
         specifier: ^2.1.5
         version: 2.1.5(react@18.3.1)
       '@langchain/anthropic':
-        specifier: ^0.3.3
-        version: 0.3.3(@langchain/core@0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13)
+        specifier: ^0.2.3
+        version: 0.2.18(encoding@0.1.13)(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))
       '@langchain/community':
-        specifier: ^0.3.3
-        version: 0.3.3(@langchain/anthropic@0.3.3(@langchain/core@0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13))(@langchain/core@0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(@neondatabase/serverless@0.7.2)(@pinecone-database/pinecone@3.0.3)(@upstash/redis@1.34.0)(@vercel/kv@0.2.4)(@vercel/postgres@0.5.1)(crypto-js@4.2.0)(encoding@0.1.13)(fast-xml-parser@4.5.0)(ignore@5.3.2)(ioredis@5.4.1)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.3))(lodash@4.17.21)(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.3))
+        specifier: ^0.2.3
+        version: 0.2.33(@langchain/anthropic@0.2.18(encoding@0.1.13)(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(@neondatabase/serverless@0.7.2)(@pinecone-database/pinecone@3.0.3)(@upstash/redis@1.34.0)(@vercel/kv@0.2.4)(@vercel/postgres@0.5.1)(crypto-js@4.2.0)(encoding@0.1.13)(fast-xml-parser@4.5.0)(ignore@5.3.2)(ioredis@5.4.1)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.3))(lodash@4.17.21)(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.3))
       '@langchain/core':
-        specifier: ^0.3.3
-        version: 0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))
+        specifier: ^0.2.3
+        version: 0.2.34(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))
       '@langchain/openai':
-        specifier: ^0.3.2
-        version: 0.3.2(@langchain/core@0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13)
+        specifier: ^0.2.2
+        version: 0.2.11(encoding@0.1.13)
       '@langchain/pinecone':
         specifier: ^0.0.8
         version: 0.0.8(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))
@@ -112,7 +112,7 @@ importers:
         version: 1.3.1(next@14.2.13(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       langchain:
         specifier: ^0.2.20
-        version: 0.2.20(@langchain/anthropic@0.3.3(@langchain/core@0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13))(@pinecone-database/pinecone@3.0.3)(@vercel/kv@0.2.4)(encoding@0.1.13)(fast-xml-parser@4.5.0)(ignore@5.3.2)(ioredis@5.4.1)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.3))(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.3))
+        version: 0.2.20(@langchain/anthropic@0.2.18(encoding@0.1.13)(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(@pinecone-database/pinecone@3.0.3)(@vercel/kv@0.2.4)(encoding@0.1.13)(fast-xml-parser@4.5.0)(ignore@5.3.2)(ioredis@5.4.1)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.3))(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.3))
       lucide-react:
         specifier: ^0.414.0
         version: 0.414.0(react@18.3.1)
@@ -306,8 +306,8 @@ packages:
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
 
-  '@anthropic-ai/sdk@0.27.3':
-    resolution: {integrity: sha512-IjLt0gd3L4jlOfilxVXTifn42FnVffMgDC04RJK1KDZpmkBWLv0XC92MVVmkxrFZNS/7l3xWgP/I3nqtX1sQHw==}
+  '@anthropic-ai/sdk@0.25.2':
+    resolution: {integrity: sha512-F1Hck/asswwidFLtGdMg3XYgRxEUfygNbpkq5KEaEGsHNaSfxeX18/uZGQCL0oQNcj/tYNx8BaFXVwRhFDi45g==}
 
   '@auth/core@0.18.4':
     resolution: {integrity: sha512-GsNhsP1xE/3FoNS3dVkPjqRljLNJ4iyL2OLv3klQGNvw3bMpROFcK4lqhx7+pPHiamnVaYt2vg1xbB+lsNaevg==}
@@ -424,14 +424,12 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@langchain/anthropic@0.3.3':
-    resolution: {integrity: sha512-OvnSV3Tjhb87n7CxWzIcJqcJEM4qoFDYYt6Rua7glQF/Ud5FBTurlzoMunLPTQeF5GdPiaOwP3nUw6I9gF7ppw==}
+  '@langchain/anthropic@0.2.18':
+    resolution: {integrity: sha512-4ZDTxMwGKTPRAi2Supu/faBSmwPIm/ga5QlazyO78Mf/8QbDR2DcvM5394FAy+X/nRAfnMbyXteO5IRJm653gw==}
     engines: {node: '>=18'}
-    peerDependencies:
-      '@langchain/core': '>=0.2.21 <0.4.0'
 
-  '@langchain/community@0.3.3':
-    resolution: {integrity: sha512-445g9hBeBNndNC8ruQIO/sNbHYBL3jjrPuDW+/S6e/RAXo8whJA/02CWRcSMDYX3o4+1Brrg6rFimipOuM9M9w==}
+  '@langchain/community@0.2.33':
+    resolution: {integrity: sha512-YsytROnBYoPqtUcV2In+afyLACzxwFrYRn7EBKYL7XWl3XNwrT85U1+nLM5b+MOjXvg9YfJSjrs1Tlbfy4st8g==}
     engines: {node: '>=18'}
     peerDependencies:
       '@arcjet/redact': ^v1.0.0-alpha.23
@@ -461,7 +459,7 @@ packages:
       '@google-cloud/storage': ^6.10.1 || ^7.7.0
       '@gradientai/nodejs-sdk': ^1.2.0
       '@huggingface/inference': ^2.6.4
-      '@langchain/core': '>=0.2.21 <0.4.0'
+      '@langchain/langgraph': '*'
       '@layerup/layerup-security': ^1.5.12
       '@mendable/firecrawl-js': ^0.0.13
       '@mlc-ai/web-llm': '*'
@@ -484,7 +482,7 @@ packages:
       '@tensorflow-models/universal-sentence-encoder': '*'
       '@tensorflow/tfjs-converter': '*'
       '@tensorflow/tfjs-core': '*'
-      '@upstash/ratelimit': ^1.1.3 || ^2.0.3
+      '@upstash/ratelimit': ^1.1.3
       '@upstash/redis': ^1.20.6
       '@upstash/vector': ^1.1.1
       '@vercel/kv': ^0.2.3
@@ -541,7 +539,6 @@ packages:
       playwright: ^1.32.1
       portkey-ai: ^0.1.11
       puppeteer: '*'
-      pyodide: '>=0.24.1 <0.27.0'
       redis: '*'
       replicate: ^0.29.4
       sonix-speech-recognition: ^2.1.1
@@ -610,6 +607,8 @@ packages:
       '@gradientai/nodejs-sdk':
         optional: true
       '@huggingface/inference':
+        optional: true
+      '@langchain/langgraph':
         optional: true
       '@layerup/layerup-security':
         optional: true
@@ -769,8 +768,6 @@ packages:
         optional: true
       puppeteer:
         optional: true
-      pyodide:
-        optional: true
       redis:
         optional: true
       replicate:
@@ -804,19 +801,9 @@ packages:
     resolution: {integrity: sha512-Hkveq1UcOjUj1DVn5erbqElyRj1t04NORSuSIZAJCtPO7EDkIqomjAarJ5+I5NUpQeIONgbOdnY9TkJ6cKUSVA==}
     engines: {node: '>=18'}
 
-  '@langchain/core@0.3.3':
-    resolution: {integrity: sha512-WAtkmhbdl2T41qzimTzhb3pXCHQxO4onqxzPxgdf3KftQdTwLq0YYBDhozRMZLNAd/+cfH0ymZGaZSsnc9Ogsg==}
-    engines: {node: '>=18'}
-
   '@langchain/openai@0.2.11':
     resolution: {integrity: sha512-Pu8+WfJojCgSf0bAsXb4AjqvcDyAWyoEB1AoCRNACgEnBWZuitz3hLwCo9I+6hAbeg3QJ37g82yKcmvKAg1feg==}
     engines: {node: '>=18'}
-
-  '@langchain/openai@0.3.2':
-    resolution: {integrity: sha512-p513TVHkZ+mMV4dGloprPFKaukOuOZxyPXY/IWReQK34c1dpnywmjrXg8ydcnfncNbq+kJ/kKe671NK9bic4WA==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@langchain/core': '>=0.2.26 <0.4.0'
 
   '@langchain/pinecone@0.0.8':
     resolution: {integrity: sha512-pV23SUebsNoMDOKbervrFNzCD48KVPLRd85jl/k6Ir8fLJDYmvon76T/SyBbrxZBDmWTaszq/LMwtJTh/VyUJg==}
@@ -4470,7 +4457,7 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@anthropic-ai/sdk@0.27.3(encoding@0.1.13)':
+  '@anthropic-ai/sdk@0.25.2(encoding@0.1.13)':
     dependencies:
       '@types/node': 18.19.54
       '@types/node-fetch': 2.6.11
@@ -4604,25 +4591,26 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@langchain/anthropic@0.3.3(@langchain/core@0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13)':
+  '@langchain/anthropic@0.2.18(encoding@0.1.13)(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))':
     dependencies:
-      '@anthropic-ai/sdk': 0.27.3(encoding@0.1.13)
-      '@langchain/core': 0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))
+      '@anthropic-ai/sdk': 0.25.2(encoding@0.1.13)
+      '@langchain/core': 0.2.34(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))
       fast-xml-parser: 4.5.0
       zod: 3.23.8
       zod-to-json-schema: 3.23.3(zod@3.23.8)
     transitivePeerDependencies:
       - encoding
+      - openai
 
-  '@langchain/community@0.3.3(@langchain/anthropic@0.3.3(@langchain/core@0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13))(@langchain/core@0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(@neondatabase/serverless@0.7.2)(@pinecone-database/pinecone@3.0.3)(@upstash/redis@1.34.0)(@vercel/kv@0.2.4)(@vercel/postgres@0.5.1)(crypto-js@4.2.0)(encoding@0.1.13)(fast-xml-parser@4.5.0)(ignore@5.3.2)(ioredis@5.4.1)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.3))(lodash@4.17.21)(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.3))':
+  '@langchain/community@0.2.33(@langchain/anthropic@0.2.18(encoding@0.1.13)(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(@neondatabase/serverless@0.7.2)(@pinecone-database/pinecone@3.0.3)(@upstash/redis@1.34.0)(@vercel/kv@0.2.4)(@vercel/postgres@0.5.1)(crypto-js@4.2.0)(encoding@0.1.13)(fast-xml-parser@4.5.0)(ignore@5.3.2)(ioredis@5.4.1)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.3))(lodash@4.17.21)(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.3))':
     dependencies:
-      '@langchain/core': 0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))
-      '@langchain/openai': 0.3.2(@langchain/core@0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13)
+      '@langchain/core': 0.2.34(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))
+      '@langchain/openai': 0.2.11(encoding@0.1.13)
       binary-extensions: 2.3.0
       expr-eval: 2.0.2
       flat: 5.0.2
       js-yaml: 4.1.0
-      langchain: 0.2.20(@langchain/anthropic@0.3.3(@langchain/core@0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13))(@pinecone-database/pinecone@3.0.3)(@vercel/kv@0.2.4)(encoding@0.1.13)(fast-xml-parser@4.5.0)(ignore@5.3.2)(ioredis@5.4.1)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.3))(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.3))
+      langchain: 0.2.20(@langchain/anthropic@0.2.18(encoding@0.1.13)(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(@pinecone-database/pinecone@3.0.3)(@vercel/kv@0.2.4)(encoding@0.1.13)(fast-xml-parser@4.5.0)(ignore@5.3.2)(ioredis@5.4.1)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.3))(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.3))
       langsmith: 0.1.61(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))
       uuid: 10.0.0
       zod: 3.23.8
@@ -4656,24 +4644,9 @@ snapshots:
       - handlebars
       - openai
       - peggy
+      - pyodide
 
   '@langchain/core@0.2.34(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))':
-    dependencies:
-      ansi-styles: 5.2.0
-      camelcase: 6.3.0
-      decamelize: 1.2.0
-      js-tiktoken: 1.0.14
-      langsmith: 0.1.61(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))
-      mustache: 4.2.0
-      p-queue: 6.6.2
-      p-retry: 4.6.2
-      uuid: 10.0.0
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.3(zod@3.23.8)
-    transitivePeerDependencies:
-      - openai
-
-  '@langchain/core@0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))':
     dependencies:
       ansi-styles: 5.2.0
       camelcase: 6.3.0
@@ -4692,16 +4665,6 @@ snapshots:
   '@langchain/openai@0.2.11(encoding@0.1.13)':
     dependencies:
       '@langchain/core': 0.2.34(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))
-      js-tiktoken: 1.0.14
-      openai: 4.65.0(encoding@0.1.13)(zod@3.23.8)
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.3(zod@3.23.8)
-    transitivePeerDependencies:
-      - encoding
-
-  '@langchain/openai@0.3.2(@langchain/core@0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13)':
-    dependencies:
-      '@langchain/core': 0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))
       js-tiktoken: 1.0.14
       openai: 4.65.0(encoding@0.1.13)(zod@3.23.8)
       zod: 3.23.8
@@ -6901,7 +6864,7 @@ snapshots:
 
   kleur@4.1.5: {}
 
-  langchain@0.2.20(@langchain/anthropic@0.3.3(@langchain/core@0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13))(@pinecone-database/pinecone@3.0.3)(@vercel/kv@0.2.4)(encoding@0.1.13)(fast-xml-parser@4.5.0)(ignore@5.3.2)(ioredis@5.4.1)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.3))(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.3)):
+  langchain@0.2.20(@langchain/anthropic@0.2.18(encoding@0.1.13)(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(@pinecone-database/pinecone@3.0.3)(@vercel/kv@0.2.4)(encoding@0.1.13)(fast-xml-parser@4.5.0)(ignore@5.3.2)(ioredis@5.4.1)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.3))(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.3)):
     dependencies:
       '@langchain/core': 0.2.34(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))
       '@langchain/openai': 0.2.11(encoding@0.1.13)
@@ -6918,7 +6881,7 @@ snapshots:
       zod: 3.23.8
       zod-to-json-schema: 3.23.3(zod@3.23.8)
     optionalDependencies:
-      '@langchain/anthropic': 0.3.3(@langchain/core@0.3.3(openai@4.65.0(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13)
+      '@langchain/anthropic': 0.2.18(encoding@0.1.13)(openai@4.65.0(encoding@0.1.13)(zod@3.23.8))
       '@pinecone-database/pinecone': 3.0.3
       '@vercel/kv': 0.2.4
       fast-xml-parser: 4.5.0

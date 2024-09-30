@@ -13,7 +13,12 @@ const WaitingList: React.FC = () => {
           Join our waiting list to be the first to know about new features and
           updates.
         </p>
-        <form action={addToWaitingList} className="max-w-md mx-auto">
+        <form
+          action={async (formData: FormData) => {
+            await addToWaitingList(formData)
+          }}
+          className="max-w-md mx-auto"
+        >
           <div className="flex">
             <input
               type="email"
