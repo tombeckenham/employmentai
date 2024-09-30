@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-module.exports = {
+const nextConfig = {
   images: {
     remotePatterns: [
       {
@@ -25,9 +25,12 @@ module.exports = {
     })
     if (isServer) {
       config.externals.push({
-        '@napi-rs/canvas': 'commonjs @napi-rs/canvas'
+        '@napi-rs/canvas': 'commonjs @napi-rs/canvas',
+        canvas: 'commonjs canvas' // Add this line
       })
     }
     return config
   }
 }
+
+export default nextConfig
