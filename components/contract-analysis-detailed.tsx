@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   Briefcase,
   Building,
@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 
 import { ContractReport } from '@/lib/types'
+import { ContractChat } from '@/components/contract-chat' // Import the new chat component
 
 const ContractAnalysis = ({ report }: { report: ContractReport }) => {
   const [viewMode, setViewMode] = useState('summary')
@@ -202,30 +203,13 @@ const ContractAnalysis = ({ report }: { report: ContractReport }) => {
           )}
         </div>
 
+        {/* Replace the chat stub with ContractChat */}
         {viewMode === 'summary' && (
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-              Chat with AI
-            </h2>
-            <div className="h-64 bg-gray-100 rounded-lg p-4 mb-4 overflow-y-auto">
-              <div className="mb-2 text-left">
-                <span className="inline-block p-2 rounded-lg bg-blue-100 text-blue-800">
-                  I&apos;ve analyzed your contract. Would you like to discuss
-                  any specific aspects or concerns?
-                </span>
-              </div>
-            </div>
-            <div className="flex">
-              <input
-                type="text"
-                className="grow border rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
-                placeholder="Ask about your contract..."
-              />
-              <button className="bg-purple-600 text-white px-4 py-2 rounded-r-lg hover:bg-purple-700 transition duration-300">
-                Send
-              </button>
-            </div>
-          </div>
+          <ContractChat
+            contract={report.contractText}
+            analysisPrompt={report.analysisPrompt}
+            report={JSON.stringify(report)} // Pass the stringified report
+          />
         )}
       </div>
     </div>

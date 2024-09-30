@@ -66,6 +66,8 @@ export interface ContractReport extends ContractData {
     negative: string[]
   }
   sections: Section[]
+  contractText: string // The full text of the contract
+  analysisPrompt: string // The prompt used for analysis
 }
 
 export interface Document {

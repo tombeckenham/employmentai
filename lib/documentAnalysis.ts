@@ -1,111 +1,26 @@
-import { ChatAnthropic } from '@langchain/anthropic' // Use langchain's Anthropic integration
-import { VoyageEmbeddings } from '@langchain/community/embeddings/voyage'
-import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf'
-import { Document } from '@langchain/core/documents'
-
+import { PDFLoader } from 'langchain/document_loaders/fs/pdf'
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
-import { MemoryVectorStore } from 'langchain/vectorstores/memory'
-import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { Document } from 'langchain/document'
 
-import { createRetrievalChain } from 'langchain/chains/retrieval'
-import { createStuffDocumentsChain } from 'langchain/chains/combine_documents'
-
-// Initialize Anthropic client
-const model = new ChatAnthropic({
-  model: 'claude-3-sonnet-20240229'
-})
-
-// Initialize Voyage AI Embeddings
-const embeddings = new VoyageEmbeddings({
-  inputType: 'document',
-  modelName: 'voyage-large-2'
-})
-
-// Function to extract text from PDF using PDF.js
-export async function getDocsFromPDF(pdfURL: string) {
-  // Create a blob from the URL
+export async function getDocsFromPDF(pdfURL: string): Promise<Document[]> {
   const response = await fetch(pdfURL)
   if (!response.ok) {
     throw new Error('Failed to fetch PDF')
   }
   const blob = await response.blob()
-  // Create a new PDFLoader instance
-  const loader = new PDFLoader(blob, {
-    // pdfjs: () => import('pdfjs-dist/legacy/build/pdf.mjs'),
-    parsedItemSeparator: '',
-    splitPages: false
-  })
-
-  // load the doc
+  const loader = new PDFLoader(blob)
   const docs = await loader.load()
-  return docs
+  return splitDocsIntoChunks(docs)
 }
 
-function splitDocsIntoChunks(
+async function splitDocsIntoChunks(
   docs: Document[],
-  chunkSize = 2000, // Increased from 1000
-  overlap = 300 // Increased from 200
+  chunkSize = 2000,
+  overlap = 300
 ): Promise<Document[]> {
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: chunkSize,
     chunkOverlap: overlap
   })
-  return splitter.splitDocuments(docs)
-}
-
-const systemTemplate = [
-  `You are an employee advocate reviewing employee documents on behalf of an employee.`,
-  `You should not provide legal advice or make any decisions on behalf of the employee.`,
-  `There is no need to say anything about this not being legal advice and don't point out that you are not a lawyer, we have text elsewhere that indicates that.`,
-  `You should provide information on the policies and how they may affect the employee.`,
-  `If you don't know the answer to a question, you can say "I don't know" or "I'm not sure".`,
-  `When relevant, always try to identify and mention the employer's name from the documents.`,
-  `\n\n`,
-  `{context}`
-].join('')
-
-const prompt = ChatPromptTemplate.fromMessages([
-  ['system', systemTemplate],
-  ['human', '{input}']
-])
-
-// Main function to process PDFs and answer questions
-export async function processPDFsAndAnswerQuestions(
-  pdfURLs: string[],
-  question: string
-): Promise<string> {
-  // Load all the docs then flatten
-  const docs = (
-    await Promise.all(pdfURLs.map(pdfURL => getDocsFromPDF(pdfURL)))
-  ).flat()
-
-  const splits = await splitDocsIntoChunks(docs)
-
-  // Create and store embeddings
-  const vectorStore = await MemoryVectorStore.fromDocuments(splits, embeddings)
-
-  // Get a retriever
-  const retriever = vectorStore.asRetriever({
-    k: 5 // Retrieve top 5 most relevant chunks instead of the default
-  })
-
-  // Create the question-answer chain
-  const questionAnswerChain = await createStuffDocumentsChain({
-    llm: model,
-    prompt
-  })
-  // Create the retrieval chain
-  const ragChain = await createRetrievalChain({
-    retriever,
-    combineDocsChain: questionAnswerChain
-  })
-  // Invoke the chain
-  const results = await ragChain.invoke({
-    input: question
-  })
-
-  // If you want to see the docs that were referenced
-  // console.log(results.context);
-
-  return results.answer
+  return await splitter.splitDocuments(docs)
 }
