@@ -8,13 +8,6 @@ export const authConfig = {
   },
   callbacks: {
     async authorized({ auth, request: { nextUrl } }) {
-      console.log('authorized', nextUrl)
-
-      if (nextUrl.pathname.startsWith('/api')) {
-        console.log('api call')
-        return true
-      }
-
       const isLoggedIn = !!auth?.user
 
       const isOnSignIn = nextUrl.pathname.startsWith('/login')
