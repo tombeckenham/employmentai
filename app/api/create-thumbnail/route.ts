@@ -9,4 +9,4 @@ async function handler(req: NextRequest) {
   return new Response('OK', { status: 200 })
 }
 
-export const POST = handler
+export const POST = verifySignatureAppRouter(handler)
