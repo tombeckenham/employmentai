@@ -19,9 +19,16 @@ export async function triggerBackgroundJob(jobType: string, data: any) {
   }
   const domain =
     process.env.WEBHOOK_URL ||
-    (process.env.NODE_ENV === 'production'
+    (process.env.VERCEL_ENV === 'production'
       ? process.env.VERCEL_PROJECT_PRODUCTION_URL
       : process.env.VERCEL_URL)
+
+  console.log('domain', domain, {
+    WEBHOOK_URL: process.env.WEBHOOK_URL,
+    VERCEL_ENV: process.env.VERCEL_ENV,
+    VERCEL_PROJECT_PRODUCTION_URL: process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    VERCEL_URL: process.env.VERCEL_URL
+  })
 
   const webhookUrl = `https://${domain}/api/${apiRoute}`
 
