@@ -2,7 +2,7 @@
 // @ts-expect-error pdfjs is not typed
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.min.mjs'
 
-import { createCanvas } from 'canvas'
+import { createCanvas } from '@napi-rs/canvas'
 
 // **Set the workerSrc**
 export async function renderPdfToPng(pdfBuffer: ArrayBuffer): Promise<Buffer> {
