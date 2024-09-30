@@ -43,6 +43,24 @@ export async function storeReportInDB(
   console.log('employeeResult', employeeResult)
   const employeeId = employeeResult.rows[0]?.id
   console.log('employeeId', employeeId)
+
+  console.log(
+    'about to insert report',
+    documentId,
+    documentType,
+    employerId,
+    employeeId,
+    role,
+    salary,
+    salaryCurrency,
+    jobDescription,
+    contractType,
+    contractDate,
+    startDate,
+    vacationDays,
+    noticePeriod
+  )
+
   // Insert document report (without highlights)
   const reportResult = await sql`
     INSERT INTO document_reports (
