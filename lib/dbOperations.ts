@@ -1,6 +1,13 @@
 import { sql } from '@vercel/postgres' // Import Vercel Postgres
 import { ContractReport } from './types'
 
+const chkUnk = (value: any) => {
+  if (value === null || value === undefined || value === 'unknown') {
+    return null
+  }
+  return value
+}
+
 export async function storeReportInDB(
   documentId: string,
   report: ContractReport
@@ -21,6 +28,7 @@ export async function storeReportInDB(
     highlights,
     sections
   } = report
+  console.log('report', report)
 
   // Insert employer
   const employerResult = await sql`
@@ -73,8 +81,8 @@ export async function storeReportInDB(
     )
     VALUES (
       ${documentId}, ${documentType}, ${employerId}, ${employeeId},
-      ${role || null}, ${salary || null}, ${salaryCurrency || null}, ${jobDescription || null}, ${contractType || null}, ${contractDate || null},
-      ${startDate || null}, ${vacationDays || null}, ${noticePeriod || null}
+      ${chkUnk(role)}, ${chkUnk(salary)}, ${chkUnk(salaryCurrency)}, ${chkUnk(jobDescription)}, ${chkUnk(contractType)}, ${chkUnk(contractDate)},
+      ${chkUnk(startDate)}, ${chkUnk(vacationDays)}, ${chkUnk(noticePeriod)}
     )
     RETURNING id
   `
@@ -87,9 +95,9 @@ export async function storeReportInDB(
     )
     VALUES (
       ${documentId}, ${documentType}, ${employerId}, ${employeeId},
-      ${role || null}, ${salary || null}, ${salaryCurrency || null}, ${jobDescription || null}, ${contractType || null}, ${contractDate || null},
-      ${startDate || null}, ${vacationDays || null}, ${noticePeriod || null}
-    )
+      ${chkUnk(role)}, ${chkUnk(salary)}, ${chkUnk(salaryCurrency)}, ${chkUnk(jobDescription)}, ${chkUnk(contractType)}, ${chkUnk(contractDate)},
+      ${chkUnk(startDate)}, ${chkUnk(vacationDays)}, ${chkUnk(noticePeriod)}
+   )
     RETURNING id
   `
   console.log('reportResult', reportResult)
