@@ -17,7 +17,6 @@ function DocumentList() {
   )
 
   if (error) return <div>Failed to load documents.</div>
-  if (!documents.length) return <div>Loading...</div>
 
   const classifiedDocuments = documents.reduce(
     (acc: Record<string, Record<string, Document[]>>, doc: Document) => {
