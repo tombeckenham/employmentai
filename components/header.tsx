@@ -52,17 +52,10 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="font-bold text-xl">
-              Employment AI
+              Maximize.work
             </Link>
             <div className="hidden md:block">
-              <nav className="ml-10 flex items-baseline space-x-4">
-                <Link
-                  href="/pricing"
-                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Pricing
-                </Link>
-              </nav>
+              <nav className="ml-10 flex items-baseline space-x-4"></nav>
             </div>
           </div>
           <div className="flex items-center">

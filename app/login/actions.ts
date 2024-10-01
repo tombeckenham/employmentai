@@ -27,7 +27,7 @@ export async function authenticate(
       await signIn('credentials', {
         email,
         password,
-        redirectTo: '/'
+        redirectTo: '/documents'
       })
     } else {
       return { type: 'error', message: 'Invalid credentials!' }
