@@ -31,6 +31,15 @@ const ContractAnalysis = ({ report }: { report: ContractReport }) => {
     return date
   }
 
+  const formatCurrency = (amount: number, currency: string) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount)
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 p-4">
       <div className="max-w-4xl mx-auto">
@@ -88,7 +97,7 @@ const ContractAnalysis = ({ report }: { report: ContractReport }) => {
                 <div className="flex justify-between items-center border-b border-gray-200 py-2">
                   <span className="font-medium text-gray-600">Salary</span>
                   <span className="text-gray-800">
-                    {report.salary} {report.salaryCurrency}
+                    {formatCurrency(report.salary, report.salaryCurrency)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200 py-2">
