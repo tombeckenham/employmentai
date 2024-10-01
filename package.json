@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
+    "@intercom/messenger-js-sdk": "^0.0.14",
     "@langchain/anthropic": "^0.2.18",
     "@langchain/community": "^0.2.33",
     "@langchain/core": "^0.2.34",
