@@ -97,7 +97,10 @@ const ContractAnalysis = ({ report }: { report: ContractReport }) => {
                 <div className="flex justify-between items-center border-b border-gray-200 py-2">
                   <span className="font-medium text-gray-600">Salary</span>
                   <span className="text-gray-800">
-                    {formatCurrency(report.salary, report.salaryCurrency)}
+                    {formatCurrency(
+                      report.salary || 0,
+                      report.salaryCurrency || 'USD'
+                    )}
                   </span>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200 py-2">
