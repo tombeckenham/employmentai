@@ -46,7 +46,7 @@ export async function signup(
       await signIn('credentials', {
         email,
         password,
-        redirect: false
+        redirect: true
       })
 
       return { type: 'success', message: 'Account created!' }

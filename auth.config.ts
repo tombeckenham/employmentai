@@ -21,11 +21,16 @@ export const authConfig = {
 
       const isOnHome = nextUrl.pathname === '/'
 
-      if (isOnSignIn || isOnSignUp || isOnHome) {
-        if (isLoggedIn) {
+      if (isLoggedIn) {
+        if (isOnSignIn || isOnSignUp || isOnHome) {
           return Response.redirect(new URL('/documents', nextUrl))
         }
-        return true
+      } else {
+        if (isOnHome) {
+          return Response.redirect(new URL('/login', nextUrl))
+        } else if (isOnSignIn || isOnSignUp) {
+          return true
+        }
       }
 
       return isLoggedIn
