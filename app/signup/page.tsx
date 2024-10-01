@@ -7,7 +7,7 @@ export default async function SignupPage() {
   const session = (await auth()) as Session
 
   if (session) {
-    redirect('/')
+    redirect('/documents')
   }
 
   return (

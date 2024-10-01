@@ -40,7 +40,7 @@ export function UserMenu({ user }: UserMenuProps) {
             action={async () => {
               'use server'
               await signOut({
-                redirectTo: '/'
+                redirectTo: '/login'
               })
             }}
           >
