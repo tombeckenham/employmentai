@@ -27,6 +27,7 @@ export async function authenticate(
       await signIn('credentials', {
         email,
         password,
+        redirect: true,
         redirectTo: '/documents'
       })
     } else {
