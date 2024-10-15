@@ -1,4 +1,5 @@
 import type { NextAuthConfig } from 'next-auth'
+import { NextResponse } from 'next/server'
 
 export const authConfig = {
   secret: process.env.AUTH_SECRET,
@@ -9,7 +10,6 @@ export const authConfig = {
   callbacks: {
     async authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
-
       const isOnSignIn = nextUrl.pathname.startsWith('/login')
       const isOnSignUp = nextUrl.pathname.startsWith('/signup')
 
@@ -21,13 +21,9 @@ export const authConfig = {
 
       const isOnHome = nextUrl.pathname === '/'
 
-      if (isLoggedIn) {
-        if (isOnSignIn || isOnSignUp || isOnHome) {
-          return Response.redirect(new URL('/documents', nextUrl))
-        }
-      } else {
+      if (!isLoggedIn) {
         if (isOnHome) {
-          return Response.redirect(new URL('/login', nextUrl))
+          return false
         } else if (isOnSignIn || isOnSignUp) {
           return true
         }

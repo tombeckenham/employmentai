@@ -1,6 +1,9 @@
+'use server'
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { auth } from '@/auth'
 
 interface FeatureCardProps {
   title: string
@@ -30,7 +33,11 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   </div>
 )
 
-const LandingPage: React.FC = () => {
+const LandingPage: React.FC = async () => {
+  const session = await auth()
+  if (session) {
+    redirect('/documents')
+  }
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section */}

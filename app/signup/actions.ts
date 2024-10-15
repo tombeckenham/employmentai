@@ -46,13 +46,12 @@ export async function signup(
       await signIn('credentials', {
         email,
         password,
-        redirect: true
+        redirect: false
       })
 
       return { type: 'success', message: 'Account created!' }
     } catch (error) {
       const { message } = error as Error
-
       if (
         message.startsWith('duplicate key value violates unique constraint')
       ) {
