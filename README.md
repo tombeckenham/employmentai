@@ -35,25 +35,85 @@ This template ships with OpenAI `gpt-3.5-turbo` as the default. However, thanks 
 
 ## Deploy Your Own
 
-You can deploy your own version of the Next.js AI Chatbot to Vercel with one click:
+You can deploy your own version of the EmploymentAI Chatbot to Vercel with one click:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?demo-title=Next.js+Chat&demo-description=A+full-featured%2C+hackable+Next.js+AI+chatbot+built+by+Vercel+Labs&demo-url=https%3A%2F%2Fchat.vercel.ai%2F&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4aVPvWuTmBvzM5cEdRdqeW%2F4234f9baf160f68ffb385a43c3527645%2FCleanShot_2023-06-16_at_17.09.21.png&project-name=Next.js+Chat&repository-name=nextjs-chat&repository-url=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fai-chatbot&from=templates&skippable-integrations=1&env=OPENAI_API_KEY%2CAUTH_SECRET&envDescription=How+to+get+these+env+vars&envLink=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fai-chatbot%2Fblob%2Fmain%2F.env.example&teamCreateStatus=hidden&stores=[{"type":"kv"},{"type":"postgres"}])
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?demo-title=EmploymentAI+Chatbot&demo-description=An+AI-powered+employment+chatbot+with+advanced+features&project-name=employmentai-chatbot&repository-name=employmentai-chatbot&from=templates&skippable-integrations=1&env=AUTH_SECRET%2COPENAI_API_KEY%2CKV_URL%2CKV_REST_API_URL%2CKV_REST_API_TOKEN%2CBLOB_READ_WRITE_TOKEN%2CQSTASH_TOKEN%2CGOOGLE_PLACES_API_KEY&envDescription=Required+environment+variables+for+EmploymentAI&envLink=https%3A%2F%2Fgithub.com%2Ftombeckenham%2Femploymentai%2Fblob%2Fmain%2F.env.example&teamCreateStatus=hidden&stores=[{"type":"kv"},{"type":"blob"}])
+
+### Required Vercel Integrations
+
+When deploying, make sure to set up:
+
+1. **Vercel KV** - For chat history and session storage
+2. **Vercel Blob** - For file uploads and storage
+3. **Upstash QStash** - For background job processing (external service)
+
+### Post-Deployment Setup
+
+After deployment, you'll need to:
+
+1. Configure your **OpenAI API key** in the Vercel dashboard
+2. Set up **Upstash QStash** for background jobs:
+   - Create account at [console.upstash.com](https://console.upstash.com/)
+   - Get QStash token and add to environment variables
+3. Enable **Google Places API** for location features:
+   - Create project in [Google Cloud Console](https://console.cloud.google.com/)
+   - Enable Places API and create credentials
+4. Configure webhooks by updating `WEBHOOK_URL` to your Vercel deployment URL
 
 ## Creating a KV Database Instance
 
 Follow the steps outlined in the [quick start guide](https://vercel.com/docs/storage/vercel-kv/quickstart#create-a-kv-database) provided by Vercel. This guide will assist you in creating and configuring your KV database instance on Vercel, enabling your application to interact with it.
 
-Remember to update your environment variables (`KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `KV_REST_API_READ_ONLY_TOKEN`) in the `.env` file with the appropriate credentials provided during the KV database setup.
+Remember to update your environment variables (`KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`) in the `.env` file with the appropriate credentials provided during the KV database setup.
+
+## Environment Variables
+
+This application requires several environment variables to function properly. Copy `.env.example` to `.env.local` and configure the following:
+
+### Required Environment Variables
+
+| Variable | Description | Where to get it |
+|----------|-------------|-----------------|
+| `AUTH_SECRET` | Secret key for NextAuth.js authentication | Generate with `openssl rand -base64 32` or [generate-secret.vercel.app](https://generate-secret.vercel.app/32) |
+| `OPENAI_API_KEY` | OpenAI API key for GPT models | [OpenAI Platform](https://platform.openai.com/account/api-keys) |
+| `KV_URL` | Vercel KV database URL | [Vercel KV Dashboard](https://vercel.com/docs/storage/vercel-kv/quickstart) |
+| `KV_REST_API_URL` | Vercel KV REST API endpoint | Vercel KV Dashboard |
+| `KV_REST_API_TOKEN` | Vercel KV REST API token | Vercel KV Dashboard |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob storage token | [Vercel Blob Dashboard](https://vercel.com/docs/storage/vercel-blob) |
+| `QSTASH_TOKEN` | Upstash QStash token for background jobs | [Upstash Console](https://console.upstash.com/qstash) |
+| `GOOGLE_PLACES_API_KEY` | Google Places API for location data | [Google Cloud Console](https://console.cloud.google.com/apis/credentials) |
+
+### Optional Environment Variables
+
+| Variable | Description | Where to get it |
+|----------|-------------|-----------------|
+| `NEXT_PUBLIC_INTERCOM_APP_ID` | Intercom customer support | [Intercom](https://www.intercom.com/) |
+| `WEBHOOK_URL` | Custom webhook URL | Auto-generated if not set |
+
+### Auto-managed by Vercel
+These variables are automatically set by Vercel and should not be configured manually:
+- `VERCEL_ENV`, `VERCEL_URL`, `VERCEL_PROJECT_PRODUCTION_URL`, `NODE_ENV`
 
 ## Running locally
 
-You will need to use the environment variables [defined in `.env.example`](.env.example) to run Next.js AI Chatbot. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/projects/environment-variables) for this, but a `.env` file is all that is necessary.
+You will need to use the environment variables [defined in `.env.example`](.env.example) to run the application. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/projects/environment-variables) for this, but a `.env.local` file is all that is necessary.
 
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various OpenAI and authentication provider accounts.
+> **Important**: Never commit your `.env.local` file as it contains secrets that could compromise your accounts.
 
-1. Install Vercel CLI: `npm i -g vercel`
-2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
-3. Download your environment variables: `vercel env pull`
+### Setup Steps
+
+1. **Install Vercel CLI**: `npm i -g vercel`
+2. **Link local instance**: `vercel link`
+3. **Download environment variables**: `vercel env pull`
+
+Alternatively, copy `.env.example` to `.env.local` and configure manually:
+
+```bash
+cp .env.example .env.local
+# Edit .env.local with your actual values
+```
+
+### Install and run
 
 ```bash
 pnpm install
@@ -61,7 +121,7 @@ pnpm seed
 pnpm dev
 ```
 
-Your app template should now be running on [localhost:3000](http://localhost:3000/).
+Your app should now be running on [localhost:3000](http://localhost:3000/).
 
 ## Run ngrok
 

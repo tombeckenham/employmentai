@@ -1,11 +1,5 @@
-import { OpenAIStream, StreamingTextResponse } from 'ai'
-import OpenAI from 'openai'
-import { ChatCompletionMessageParam } from 'openai/resources/chat/completions'
-
-// Create an OpenAI API client (that's edge friendly!)
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || ''
-})
+import { openai } from '@ai-sdk/openai'
+import { streamText } from 'ai'
 
 // IMPORTANT! Set the runtime to edge
 export const runtime = 'edge'
@@ -14,14 +8,11 @@ export async function POST(req: Request) {
   const { messages } = await req.json()
 
   // Ask OpenAI for a streaming chat completion given the prompt
-  const response = await openai.chat.completions.create({
-    model: 'gpt-4o-mini',
-    stream: true,
-    messages: messages as ChatCompletionMessageParam[]
+  const result = await streamText({
+    model: openai('gpt-4o-mini'),
+    messages: messages
   })
 
-  // Convert the response into a friendly text-stream
-  const stream = OpenAIStream(response)
   // Respond with the stream
-  return new StreamingTextResponse(stream)
+  return result.toTextStreamResponse()
 }
