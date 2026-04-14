@@ -6,7 +6,6 @@ import { JsonOutputParser } from '@langchain/core/output_parsers'
 import { RunnableSequence } from '@langchain/core/runnables'
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
 import { Document } from '@langchain/core/documents'
-import { LangChainTracer } from 'langchain/callbacks'
 import { MemoryVectorStore } from 'langchain/vectorstores/memory'
 import { OpenAIEmbeddings } from '@langchain/openai'
 import {
@@ -150,13 +149,6 @@ const contractSchema = z.object({
   noticePeriod: z.string().optional().describe('Notice period duration')
 })
 
-const model = new ChatOpenAI({
-  modelName: 'gpt-4o-mini',
-  temperature: 0
-})
-
-const structuredLlm = model.withStructuredOutput(contractSchema)
-
 const extractionPrompt = PromptTemplate.fromTemplate(`
 You are an expert in employment documents. Extract the following information from the given document:
 
@@ -166,14 +158,6 @@ Document content: {context}
 `)
 
 const extractionOutputParser = new JsonOutputParser<ContractData>()
-
-const tracer = new LangChainTracer()
-
-const extractionChain = RunnableSequence.from([
-  extractionPrompt,
-  new ChatOpenAI({ modelName: 'gpt-4o-mini', temperature: 0 }),
-  extractionOutputParser
-]).withConfig({ callbacks: [tracer] })
 
 const analysisPrompt = PromptTemplate.fromTemplate(`
 You are an expert in analyzing employment contracts. Given the following extracted contract data and full document content, provide an analysis including highlights and an evaluation of each section:
@@ -190,12 +174,6 @@ Provide your analysis in the following format:
 `)
 
 const analysisOutputParser = new JsonOutputParser<ContractReport>()
-
-const analysisChain = RunnableSequence.from([
-  analysisPrompt,
-  new ChatOpenAI({ modelName: 'gpt-4o-mini', temperature: 0 }),
-  analysisOutputParser
-]).withConfig({ callbacks: [tracer] })
 
 async function getDocumentContent(contractUrl: string): Promise<Document[]> {
   return await getDocsFromPDF(contractUrl)

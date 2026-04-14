@@ -4,13 +4,6 @@ import { PromptTemplate } from '@langchain/core/prompts'
 import { RunnableSequence } from '@langchain/core/runnables'
 import { StringOutputParser } from '@langchain/core/output_parsers'
 
-// Initialize the ChatOpenAI model
-const model = new ChatOpenAI({
-  modelName: 'gpt-4o-mini',
-  temperature: 0.0,
-  openAIApiKey: process.env.OPENAI_API_KEY
-})
-
 // Define the base prompt template
 const baseTemplate = `You are an AI assistant specialized in estimating salaries based on job and candidate information. 
 Given the following details, provide an estimated annual salary range and a brief explanation for your estimate.
@@ -92,6 +85,12 @@ export async function POST(request: NextRequest) {
       sector: companyAnalysis?.sector,
       companySize: companyAnalysis?.companySize
     }
+
+    const model = new ChatOpenAI({
+      modelName: 'gpt-4o-mini',
+      temperature: 0.0,
+      openAIApiKey: process.env.OPENAI_API_KEY
+    })
 
     const fullTemplate = generateFullTemplate(fields)
     const promptTemplate = PromptTemplate.fromTemplate(fullTemplate)

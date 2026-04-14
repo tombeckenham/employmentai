@@ -5,13 +5,7 @@ import { PromptTemplate } from '@langchain/core/prompts'
 import { RunnableSequence } from '@langchain/core/runnables'
 import { StringOutputParser } from '@langchain/core/output_parsers'
 
-const model = new ChatOpenAI({
-  modelName: 'gpt-4o-mini',
-  temperature: 0.0,
-  openAIApiKey: process.env.OPENAI_API_KEY
-})
-
-const template = `You are an AI assistant specialized in analyzing companies based on limited information. 
+const template = `You are an AI assistant specialized in analyzing companies based on limited information.
 Given the following details about a company, estimate its funding stage, sector, and size.
 
 Company: {company}
@@ -25,18 +19,22 @@ Company Size: [Startup (<50 employees)/Small (50-250 employees)/Medium (251-1000
 
 Explanation: [Brief explanation for your estimates]`
 
-const promptTemplate = PromptTemplate.fromTemplate(template)
-
-// Create the LCEL chain
-const chain = RunnableSequence.from([
-  promptTemplate,
-  model,
-  new StringOutputParser()
-])
-
 export async function POST(request: NextRequest) {
   try {
     const { company, jobTitle, jobDescription } = await request.json()
+
+    const model = new ChatOpenAI({
+      modelName: 'gpt-4o-mini',
+      temperature: 0.0,
+      openAIApiKey: process.env.OPENAI_API_KEY
+    })
+
+    const promptTemplate = PromptTemplate.fromTemplate(template)
+    const chain = RunnableSequence.from([
+      promptTemplate,
+      model,
+      new StringOutputParser()
+    ])
 
     const result = await chain.invoke({
       company,

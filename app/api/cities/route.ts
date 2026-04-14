@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server'
 
-// Ensure you have set up your Google Places API key in your environment variables
-const API_KEY = process.env.GOOGLE_PLACES_API_KEY
-
-if (!API_KEY) {
-  throw new Error('GOOGLE_PLACES_API_KEY is not set in environment variables')
-}
-
 export async function GET(request: Request) {
+  const API_KEY = process.env.GOOGLE_PLACES_API_KEY
+  if (!API_KEY) {
+    return NextResponse.json(
+      { error: 'GOOGLE_PLACES_API_KEY is not set in environment variables' },
+      { status: 500 }
+    )
+  }
+
   const { searchParams } = new URL(request.url)
   const query = searchParams.get('query')
 

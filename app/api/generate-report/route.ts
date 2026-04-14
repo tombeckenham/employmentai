@@ -12,4 +12,8 @@ async function handler(req: NextRequest) {
   return new Response('OK', { status: 200 })
 }
 
-export const POST = verifySignatureAppRouter(handler)
+const hasQstashKeys =
+  process.env.QSTASH_CURRENT_SIGNING_KEY &&
+  process.env.QSTASH_NEXT_SIGNING_KEY
+
+export const POST = hasQstashKeys ? verifySignatureAppRouter(handler) : handler
