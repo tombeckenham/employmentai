@@ -13,7 +13,6 @@
     "format:check": "prettier --check \"{app,lib,components}**/*.{ts,tsx,mdx}\" --cache"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^2.0.102",
     "@heroicons/react": "^2.2.0",
     "@intercom/messenger-js-sdk": "^0.0.14",
     "@langchain/core": "^0.2.36",
@@ -36,7 +35,7 @@
     "@vercel/kv": "^1.0.1",
     "@vercel/og": "^0.6.8",
     "@vercel/postgres": "^0.7.2",
-    "ai": "^5.0.173",
+    "ai": "^3.4.33",
     "canvas": "^3.2.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -83,7 +82,7 @@
     "eslint": "^8.57.1",
     "eslint-config-next": "14.2.35",
     "eslint-config-prettier": "^9.1.2",
-    "eslint-plugin-tailwindcss": "^3.18.3",
+    "eslint-plugin-tailwindcss": "3.18.2",
     "postcss": "^8.5.9",
     "prettier": "^3.8.2",
     "tailwind-merge": "^2.6.1",
